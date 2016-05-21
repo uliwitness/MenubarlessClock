@@ -93,9 +93,12 @@
 	[self.timeField setStringValue: [sTimeFormatter stringFromDate: currentTime]];
 	[self.window layoutIfNeeded];
 	NSRect			currentBox = self.window.frame;
-	NSRect			screenFrame = self.window.screen.frame;
+	NSScreen	*	theScreen = self.window.screen;
+	if( !theScreen )
+		theScreen = NSScreen.screens[0];
+	NSRect			screenFrame = theScreen.frame;
 	currentBox.origin.x = NSMaxX(screenFrame) -currentBox.size.width;
-	currentBox.origin.y = NSMaxX(screenFrame) -currentBox.size.height;
+	currentBox.origin.y = NSMaxY(screenFrame) -currentBox.size.height;
 	[self.window setFrame: currentBox display: YES];
 	
 	if( !self.showSeconds )
