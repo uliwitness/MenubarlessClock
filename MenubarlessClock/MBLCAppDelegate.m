@@ -58,15 +58,17 @@
 
 @interface MBLCAppDelegate ()
 
-@property (weak) IBOutlet NSWindow *window;
-@property (weak) IBOutlet NSTextField *timeField;
+@property (weak) IBOutlet NSWindow *	window;
+@property (weak) IBOutlet NSTextField *	timeField;
 @property (assign) BOOL					showSeconds;
 
 @end
 
 @implementation MBLCAppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+- (void)	applicationDidFinishLaunching: (NSNotification *)aNotification {
+	self.showSeconds = [[NSUserDefaults standardUserDefaults] boolForKey: @"MBLCShowSeconds"];
+	
 	self.window.alphaValue = 0.0;
 	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: self.showSeconds ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];
 	[clockTimer setFireDate: [NSDate date]];
@@ -74,10 +76,6 @@
 	self.window.opaque = NO;
 	[self.window orderFront: self];
 	self.window.animator.alphaValue = 1.0;
-}
-
-- (void)applicationWillTerminate:(NSNotification *)aNotification {
-	// Insert code here to tear down your application
 }
 
 
@@ -95,7 +93,9 @@
 	[self.timeField setStringValue: [sTimeFormatter stringFromDate: currentTime]];
 	[self.window layoutIfNeeded];
 	NSRect			currentBox = self.window.frame;
-	currentBox.origin.x = NSMaxX(self.window.screen.frame) -currentBox.size.width;
+	NSRect			screenFrame = self.window.screen.frame;
+	currentBox.origin.x = NSMaxX(screenFrame) -currentBox.size.width;
+	currentBox.origin.y = NSMaxX(screenFrame) -currentBox.size.height;
 	[self.window setFrame: currentBox display: YES];
 	
 	if( !self.showSeconds )
