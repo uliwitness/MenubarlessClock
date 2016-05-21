@@ -283,6 +283,7 @@
 				550AB8B41CF0812A00338587 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
