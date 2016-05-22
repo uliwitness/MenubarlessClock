@@ -12,9 +12,10 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <customObject id="Voe-Tx-rLC" customClass="MBLCSettingsAppDelegate">
+        <customObject id="Voe-Tx-rLC" customClass="MBLCAppDelegate">
             <connections>
-                <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
+                <outlet property="timeField" destination="z1T-yR-NmE" id="wmf-oy-eNZ"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="G5B-Dv-enj"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
@@ -667,45 +668,32 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="MenubarlessClock" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="328" height="189"/>
+        <window title="MenubarlessClock" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" hasShadow="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="NSPanel">
+            <windowStyleMask key="styleMask" utility="YES" nonactivatingPanel="YES" HUD="YES"/>
+            <windowPositionMask key="initialPositionMask" rightStrut="YES" topStrut="YES"/>
+            <rect key="contentRect" x="1234" y="778" width="46" height="22"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
-            <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="328" height="189"/>
+            <view key="contentView" id="EiT-Mj-1SZ" customClass="MBLCContentView">
+                <rect key="frame" x="0.0" y="0.0" width="46" height="22"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="hRT-q3-3rC">
-                        <rect key="frame" x="18" y="153" width="120" height="18"/>
-                        <buttonCell key="cell" type="check" title="Launch At Login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vm9-YJ-hRk">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="launchAtLogin" id="qrL-Av-ArX"/>
-                        </connections>
-                    </button>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="wqL-WD-aBy">
-                        <rect key="frame" x="18" y="127" width="112" height="18"/>
-                        <buttonCell key="cell" type="check" title="Show Seconds" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="mC4-u6-IZY">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="Voe-Tx-rLC" name="value" keyPath="showSeconds" id="cnE-w4-2me"/>
-                        </connections>
-                    </button>
+                    <textField wantsLayer="YES" horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z1T-yR-NmE">
+                        <rect key="frame" x="6" y="3" width="34" height="18"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="--:--" id="0SS-lv-tfW">
+                            <font key="font" metaFont="menuBar"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="hRT-q3-3rC" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="3xp-bB-T7H"/>
-                    <constraint firstItem="wqL-WD-aBy" firstAttribute="top" secondItem="hRT-q3-3rC" secondAttribute="bottom" constant="12" id="Tvc-Um-Rad"/>
-                    <constraint firstItem="wqL-WD-aBy" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="kTF-Sr-Had"/>
-                    <constraint firstItem="hRT-q3-3rC" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="onN-AA-8Em"/>
+                    <constraint firstAttribute="bottom" secondItem="z1T-yR-NmE" secondAttribute="bottom" constant="3" id="Yme-sr-3dR"/>
+                    <constraint firstItem="z1T-yR-NmE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="8" id="ihv-u3-1LC"/>
+                    <constraint firstAttribute="trailing" secondItem="z1T-yR-NmE" secondAttribute="trailing" constant="8" id="tKs-v0-4yv"/>
+                    <constraint firstItem="z1T-yR-NmE" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="1" id="xL2-x5-3OL"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="263" y="61.5"/>
+            <point key="canvasLocation" x="210" y="234.5"/>
         </window>
-        <userDefaultsController representsSharedInstance="YES" id="Szp-C8-tZF"/>
     </objects>
 </document>

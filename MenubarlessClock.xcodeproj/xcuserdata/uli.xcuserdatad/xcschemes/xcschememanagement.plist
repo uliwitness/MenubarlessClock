@@ -4,15 +4,25 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>MenubarlessClock.xcscheme</key>
+		<key>MenubarlessClock Helper.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>MenubarlessClock.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>550AB8A01CF0812A00338587</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>5589F7321CF263AC00ABD616</key>
 		<dict>
 			<key>primary</key>
 			<true/>

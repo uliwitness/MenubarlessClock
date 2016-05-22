@@ -27,8 +27,10 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2016 Uli Kusterer. All rights reserved.</string>
 	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
+	<string>HelperMainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>LSUIElement</key>
+	<true/>
 </dict>
 </plist>

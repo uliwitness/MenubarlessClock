@@ -67,7 +67,7 @@
 @implementation MBLCAppDelegate
 
 - (void)	applicationDidFinishLaunching: (NSNotification *)aNotification {
-	self.showSeconds = [[NSUserDefaults standardUserDefaults] boolForKey: @"MBLCShowSeconds"];
+	self.showSeconds = [[[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"] boolForKey: @"MBLCShowSeconds"];
 	
 	self.window.alphaValue = 0.0;
 	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: self.showSeconds ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];

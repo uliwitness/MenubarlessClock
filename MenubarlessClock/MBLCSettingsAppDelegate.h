@@ -1,5 +1,5 @@
 //
-//  main.m
+//  AppDelegate.h
 //  MenubarlessClock
 //
 //  Created by Uli Kusterer on 23/05/16.
@@ -8,6 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-int main(int argc, const char * argv[]) {
-	return NSApplicationMain(argc, argv);
-}
+@interface MBLCSettingsAppDelegate : NSObject <NSApplicationDelegate>
+
+@property (assign) BOOL		launchAtLogin;
+
+@end
+

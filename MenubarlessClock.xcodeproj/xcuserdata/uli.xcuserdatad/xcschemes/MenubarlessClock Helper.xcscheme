@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5589F7321CF263AC00ABD616"
-               BuildableName = "MenubarlessClock.app"
-               BlueprintName = "MenubarlessClock"
+               BlueprintIdentifier = "550AB8A01CF0812A00338587"
+               BuildableName = "MenubarlessClock Helper.app"
+               BlueprintName = "MenubarlessClock Helper"
                ReferencedContainer = "container:MenubarlessClock.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5589F7321CF263AC00ABD616"
-            BuildableName = "MenubarlessClock.app"
-            BlueprintName = "MenubarlessClock"
+            BlueprintIdentifier = "550AB8A01CF0812A00338587"
+            BuildableName = "MenubarlessClock Helper.app"
+            BlueprintName = "MenubarlessClock Helper"
             ReferencedContainer = "container:MenubarlessClock.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -55,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5589F7321CF263AC00ABD616"
-            BuildableName = "MenubarlessClock.app"
-            BlueprintName = "MenubarlessClock"
+            BlueprintIdentifier = "550AB8A01CF0812A00338587"
+            BuildableName = "MenubarlessClock Helper.app"
+            BlueprintName = "MenubarlessClock Helper"
             ReferencedContainer = "container:MenubarlessClock.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -74,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5589F7321CF263AC00ABD616"
-            BuildableName = "MenubarlessClock.app"
-            BlueprintName = "MenubarlessClock"
+            BlueprintIdentifier = "550AB8A01CF0812A00338587"
+            BuildableName = "MenubarlessClock Helper.app"
+            BlueprintName = "MenubarlessClock Helper"
             ReferencedContainer = "container:MenubarlessClock.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
