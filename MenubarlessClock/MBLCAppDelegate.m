@@ -76,6 +76,12 @@
 	self.window.opaque = NO;
 	[self.window orderFront: self];
 	self.window.animator.alphaValue = 1.0;
+	
+	if ([NSFont.class respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)])
+	{
+		NSFont *monospaceFont = [NSFont monospacedDigitSystemFontOfSize:14.0 weight:NSFontWeightRegular];
+		self.timeField.font = monospaceFont;
+	}
 }
 
 
