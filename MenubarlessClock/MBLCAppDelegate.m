@@ -73,6 +73,7 @@
 	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: self.showSeconds ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];
 	[clockTimer setFireDate: [NSDate date]];
 	self.window.level = NSMainMenuWindowLevel;
+	self.window.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces;
 	self.window.opaque = NO;
 	[self.window orderFront: self];
 	self.window.animator.alphaValue = 1.0;
