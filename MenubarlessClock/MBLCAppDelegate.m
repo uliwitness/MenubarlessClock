@@ -22,7 +22,7 @@
 	[[NSColor clearColor] set];
 	NSRectFill(self.bounds);
 	
-	[[NSColor colorWithWhite: 0.0 alpha: 0.7] set];
+	[self.window.backgroundColor set];
 	CGFloat		cornerRadius = 6;
 	NSRect		bezelBox = self.bounds;
 	bezelBox.size.height += cornerRadius;
@@ -83,6 +83,9 @@
 		NSFont *monospaceFont = [NSFont monospacedDigitSystemFontOfSize:14.0 weight:NSFontWeightRegular];
 		self.timeField.font = monospaceFont;
 	}
+	
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(adaptUIToDarkMode) name:@"AppleInterfaceThemeChangedNotification" object:nil];
+	[self adaptUIToDarkMode];
 }
 
 
@@ -118,6 +121,29 @@
 		NSInteger	seconds = [sGregorianCalendar component: NSCalendarUnitSecond fromDate: currentTime];
 		NSDate*		nextFullMinuteFireTime = [sGregorianCalendar dateByAddingUnit: NSCalendarUnitSecond value: 60.0 -seconds toDate: currentTime options: 0];
 		[sender setFireDate: nextFullMinuteFireTime];
+	}
+}
+
+
+- (BOOL)	darkModeEnabled
+{
+	NSDictionary *dict = [NSUserDefaults.standardUserDefaults persistentDomainForName:NSGlobalDomain];
+	id style = [dict objectForKey:@"AppleInterfaceStyle"];
+	return ( style && [style isKindOfClass:NSString.class] && NSOrderedSame == [style caseInsensitiveCompare:@"dark"] );
+}
+
+
+- (void)	adaptUIToDarkMode
+{
+	if (self.darkModeEnabled)
+	{
+		self.window.backgroundColor = [NSColor colorWithWhite: 0.0 alpha: 0.7];
+		self.timeField.textColor = [NSColor whiteColor];
+	}
+	else
+	{
+		self.window.backgroundColor = [NSColor colorWithWhite: 1.0 alpha: 0.9];
+		self.timeField.textColor = [NSColor blackColor];
 	}
 }
 
