@@ -77,6 +77,7 @@
 	self.window.opaque = NO;
 	[self.window orderFront: self];
 	self.window.animator.alphaValue = 1.0;
+	self.window.movable = NO;
 	
 	if ([NSFont.class respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)])
 	{
