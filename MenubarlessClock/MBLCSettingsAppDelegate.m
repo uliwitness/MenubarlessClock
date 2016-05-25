@@ -23,6 +23,12 @@
 
 @implementation MBLCSettingsAppDelegate
 
+-(BOOL) applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
+{
+	return YES;
+}
+
+
 -(BOOL)	launchAtLogin
 {
 	NSArray	*	apps = [[NSWorkspace sharedWorkspace] runningApplications];
