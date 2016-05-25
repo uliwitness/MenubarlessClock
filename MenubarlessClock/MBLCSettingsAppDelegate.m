@@ -41,23 +41,34 @@
 }
 
 
+-(NSRunningApplication*)	helperApplication
+{
+	NSArray	*	apps = [[NSWorkspace sharedWorkspace] runningApplications];
+	for( NSRunningApplication * currApp in apps )
+	{
+		if( [[currApp bundleIdentifier] isEqualToString: @MBLC_HELPER_BUNDLE_ID] )
+			return currApp;
+	}
+	
+	return nil;
+}
+
+
 -(void)	setLaunchAtLogin: (BOOL)inState
 {
 	SMLoginItemSetEnabled( CFSTR(MBLC_HELPER_BUNDLE_ID), inState == YES );
 	if( inState )
 	{
-		NSString	*	appPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString: @MBLC_HELPER_SUBPATH];
-		[[NSWorkspace sharedWorkspace] launchApplication: appPath];
-		[self.window makeKeyAndOrderFront: self];
+		if( ![self helperApplication] )
+		{
+			NSString	*	appPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString: @MBLC_HELPER_SUBPATH];
+			[[NSWorkspace sharedWorkspace] launchApplication: appPath];
+			[self.window makeKeyAndOrderFront: self];
+		}
 	}
 	else
 	{
-		NSArray	*	apps = [[NSWorkspace sharedWorkspace] runningApplications];
-		for( NSRunningApplication * currApp in apps )
-		{
-			if( [[currApp bundleIdentifier] isEqualToString: @MBLC_HELPER_BUNDLE_ID] )
-				[currApp terminate];
-		}
+		[[self helperApplication] terminate];
 	}
 }
 
@@ -70,20 +81,18 @@
 
 -(void)	setShowSeconds: (BOOL)inState
 {
-	BOOL		wasRunning = NO;
-	NSArray	*	apps = [[NSWorkspace sharedWorkspace] runningApplications];
-	for( NSRunningApplication * currApp in apps )
-	{
-		if( [[currApp bundleIdentifier] isEqualToString: @MBLC_HELPER_BUNDLE_ID] )
-		{
-			[currApp terminate];
-			wasRunning = YES;
-		}
-	}
+	NSRunningApplication	*	theHelper = [self helperApplication];
+	[theHelper terminate];
 	
 	[[NSUserDefaults standardUserDefaults] setBool: inState forKey: @"MBLCShowSeconds"];
 	
-	if( wasRunning )
+	[self performSelector: @selector(ensureRelaunchWorked:) withObject: theHelper afterDelay: 1.0];
+}
+
+
+-(void)	ensureRelaunchWorked: (id)theHelper
+{
+	if( theHelper && ![self helperApplication] )	// Had a helper, don't have one now? Re-launch!
 	{
 		NSString	*	appPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingString: @MBLC_HELPER_SUBPATH];
 		[[NSWorkspace sharedWorkspace] launchApplication: appPath];
