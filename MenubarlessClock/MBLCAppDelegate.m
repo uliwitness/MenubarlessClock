@@ -166,11 +166,11 @@
 
 -(void)		appendBatteryStateTo: (NSMutableAttributedString*)currInfoString
 {
-	CFTypeRef			psInfo = IOPSCopyPowerSourcesInfo();
-	NSArray*			powerSources = (__bridge NSArray *)(IOPSCopyPowerSourcesList(psInfo));
+	id					psInfo = CFBridgingRelease(IOPSCopyPowerSourcesInfo());
+	NSArray*			powerSources = CFBridgingRelease(IOPSCopyPowerSourcesList((__bridge CFTypeRef)(psInfo)));
 	for( id currSource in powerSources )
 	{
-		NSDictionary* dict = (__bridge NSDictionary *)(IOPSGetPowerSourceDescription( psInfo, (__bridge CFTypeRef)(currSource) ));
+		NSDictionary* dict = (__bridge NSDictionary *)(IOPSGetPowerSourceDescription( (__bridge CFTypeRef)psInfo, (__bridge CFTypeRef)(currSource) ));
 		if( [dict[@"Type"] isEqualToString: @"InternalBattery"] )
 		{
 			double	batteryFraction = [dict[@"Current Capacity"] doubleValue] / [dict[@"Max Capacity"] doubleValue];
