@@ -15,6 +15,12 @@
 #define MAX_BATTERY_LEVEL		99
 
 
+// Compiler switch to turn on battery callbacks. Sadly, so far whenever we
+//	are called back, the power management code still returns old values,
+//	even if we only react 10 seconds later. So we're not using them for now.
+#define USE_BATTERY_CALLBACKS	0
+
+
 // The "nub" on the battery's right side and the right edge is this wide
 //	(in Quartz points) in Apple's graphics:
 #define BATT_RIGHT_END_WIDTH	5
@@ -83,7 +89,6 @@
 
 @implementation MBLCAppDelegate
 
-
 -(void)	loadDefaults
 {
 	NSUserDefaults*	ud = [[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"];
@@ -118,10 +123,41 @@
 }
 
 
-- (void)	applicationDidFinishLaunching: (NSNotification *)aNotification
+#if USE_BATTERY_CALLBACKS
+static void	PowerStateChangedCallback( void* context )
+{
+	MBLCAppDelegate*	self = (__bridge MBLCAppDelegate*)context;
+	[self updateClock: nil];
+}
+
+
+-(void)	setUpBatteryCallbacks
+{
+	CFRunLoopSourceRef	powerNotificationRunLoopSource = NULL;
+	if( self.showBatteryLevelOnlyWhenLow )
+	{
+		powerNotificationRunLoopSource = IOPSCreateLimitedPowerNotification( PowerStateChangedCallback, (__bridge void *)(self) );
+	}
+	else	// If user always wants to see battery, updating once per minute is not enough:
+	{
+		powerNotificationRunLoopSource = IOPSNotificationCreateRunLoopSource( PowerStateChangedCallback, (__bridge void *)(self) );
+	}
+	CFRunLoopAddSource( [[NSRunLoop currentRunLoop] getCFRunLoop], powerNotificationRunLoopSource, kCFRunLoopCommonModes );
+	CFRelease( powerNotificationRunLoopSource );
+}
+#endif /* USE_BATTERY_CALLBACKS */
+
+
+
+-(void)	applicationDidFinishLaunching: (NSNotification *)aNotification
 {
 	[self loadDefaults];
 	[self setUpClockWindow];
+	
+#if USE_BATTERY_CALLBACKS
+	if( self.showBatteryLevel )
+		[self setUpBatteryCallbacks];
+#endif /* USE_BATTERY_CALLBACKS */
 }
 
 
@@ -290,7 +326,7 @@
 	currentBox.origin.y = NSMaxY(screenFrame) -currentBox.size.height;
 	[self.window setFrame: currentBox display: YES];
 	
-	if( !self.showSeconds )
+	if( !self.showSeconds && sender )
 	{
 		static NSCalendar	*	sGregorianCalendar = nil;
 		if( !sGregorianCalendar )
