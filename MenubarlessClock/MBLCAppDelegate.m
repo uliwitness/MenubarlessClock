@@ -109,6 +109,14 @@
 
 -(NSImage*)	batteryImageForLevel: (double)batteryFraction
 {
+	/*
+		DISCLAIMER: It is bad style to just reference arbitrary images in a system folder. Apple may,
+		at any time, change the metrics or even the names of these image files, split them up differently
+		etc. Why am I doing it, then? Because I'm too lazy to draw my own, and this is a tool for my
+		personal use, and I'm not being paid for this. Pull requests with image donations gladly accepted.
+		(Remember: We can't copy Apple's graphics, they own the Copyright, don't submit them!)
+	*/
+	
 	NSImage*		batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_FRAME_PATH];
 	return [NSImage imageWithSize: batteryImage.size flipped: NO drawingHandler: ^BOOL(NSRect dstRect)
 	{
