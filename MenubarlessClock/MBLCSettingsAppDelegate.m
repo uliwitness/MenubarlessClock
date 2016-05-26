@@ -130,6 +130,23 @@
 }
 
 
+-(BOOL)	flashSeparators
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey: @"MBLCFlashSeparators"];
+}
+
+
+-(void)	setFlashSeparators: (BOOL)inState
+{
+	NSRunningApplication	*	theHelper = [self helperApplication];
+	[theHelper terminate];
+	
+	[[NSUserDefaults standardUserDefaults] setBool: inState forKey: @"MBLCFlashSeparators"];
+	
+	[self performSelector: @selector(ensureRelaunchWorked:) withObject: theHelper afterDelay: 1.0];
+}
+
+
 -(void)	ensureRelaunchWorked: (id)theHelper
 {
 	if( theHelper && ![self helperApplication] )	// Had a helper, don't have one now? Re-launch!

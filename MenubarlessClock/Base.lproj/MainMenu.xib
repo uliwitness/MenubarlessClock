@@ -670,14 +670,14 @@
         <window title="MenubarlessClock" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="328" height="189"/>
+            <rect key="contentRect" x="335" y="390" width="328" height="158"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="328" height="189"/>
+                <rect key="frame" x="0.0" y="0.0" width="328" height="158"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="hRT-q3-3rC">
-                        <rect key="frame" x="18" y="153" width="120" height="18"/>
+                        <rect key="frame" x="18" y="122" width="120" height="18"/>
                         <buttonCell key="cell" type="check" title="Launch At Login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vm9-YJ-hRk">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -687,7 +687,7 @@
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="wqL-WD-aBy">
-                        <rect key="frame" x="18" y="127" width="112" height="18"/>
+                        <rect key="frame" x="18" y="96" width="112" height="18"/>
                         <buttonCell key="cell" type="check" title="Show Seconds" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="mC4-u6-IZY">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -696,8 +696,18 @@
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="showSeconds" id="cnE-w4-2me"/>
                         </connections>
                     </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="PCl-6f-5bC">
+                        <rect key="frame" x="18" y="70" width="124" height="18"/>
+                        <buttonCell key="cell" type="check" title="Flash Separators" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="yJd-gw-M6h">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="flashSeparators" id="Fdu-Qg-T9l"/>
+                        </connections>
+                    </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Mmo-CY-7To">
-                        <rect key="frame" x="18" y="101" width="138" height="18"/>
+                        <rect key="frame" x="18" y="44" width="138" height="18"/>
                         <buttonCell key="cell" type="check" title="Show Battery Level" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="MTo-zM-VZD">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -707,28 +717,32 @@
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="sUr-Cw-7ZI">
-                        <rect key="frame" x="34" y="75" width="114" height="18"/>
+                        <rect key="frame" x="34" y="18" width="114" height="18"/>
                         <buttonCell key="cell" type="check" title="Only when Low" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="K73-aE-6Jc">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="showBatteryLevel" id="vLR-mz-G7O"/>
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="showBatteryLevelOnlyWhenLow" id="HOP-4n-abJ"/>
                         </connections>
                     </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="hRT-q3-3rC" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="3xp-bB-T7H"/>
+                    <constraint firstItem="PCl-6f-5bC" firstAttribute="top" secondItem="wqL-WD-aBy" secondAttribute="bottom" constant="12" id="ETn-pp-FbD"/>
                     <constraint firstItem="sUr-Cw-7ZI" firstAttribute="leading" secondItem="Mmo-CY-7To" secondAttribute="leading" constant="16" id="Fzi-gR-HPX"/>
+                    <constraint firstAttribute="bottom" secondItem="sUr-Cw-7ZI" secondAttribute="bottom" constant="20" id="G4f-uY-zcb"/>
+                    <constraint firstItem="Mmo-CY-7To" firstAttribute="top" secondItem="PCl-6f-5bC" secondAttribute="bottom" constant="12" id="Ql0-X5-7VT"/>
                     <constraint firstItem="sUr-Cw-7ZI" firstAttribute="top" secondItem="Mmo-CY-7To" secondAttribute="bottom" constant="12" id="ScW-o5-Rey"/>
                     <constraint firstItem="wqL-WD-aBy" firstAttribute="top" secondItem="hRT-q3-3rC" secondAttribute="bottom" constant="12" id="Tvc-Um-Rad"/>
+                    <constraint firstItem="PCl-6f-5bC" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="eXD-9k-Emp"/>
                     <constraint firstItem="wqL-WD-aBy" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="kTF-Sr-Had"/>
-                    <constraint firstItem="Mmo-CY-7To" firstAttribute="top" secondItem="wqL-WD-aBy" secondAttribute="bottom" constant="12" id="obU-nL-CPO"/>
                     <constraint firstItem="hRT-q3-3rC" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="onN-AA-8Em"/>
                     <constraint firstItem="Mmo-CY-7To" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="vxm-mu-FGO"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="263" y="61.5"/>
+            <point key="canvasLocation" x="263" y="46"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="Szp-C8-tZF"/>
     </objects>

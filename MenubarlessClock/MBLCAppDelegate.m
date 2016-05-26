@@ -84,6 +84,7 @@
 @property (assign) BOOL					showSeconds;
 @property (assign) BOOL					showBatteryLevel;
 @property (assign) BOOL					showBatteryLevelOnlyWhenLow;
+@property (assign) BOOL					flashSeparators;
 
 @end
 
@@ -96,13 +97,14 @@
 	self.showSeconds = [ud boolForKey: @"MBLCShowSeconds"];
 	self.showBatteryLevel = [ud boolForKey: @"MBLCShowBatteryLevel"];
 	self.showBatteryLevelOnlyWhenLow = [ud boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
+	self.flashSeparators = [ud boolForKey: @"MBLCFlashSeparators"];
 }
 
 
 -(void)	setUpClockWindow
 {
 	self.window.alphaValue = 0.0;
-	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: self.showSeconds ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];
+	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: (self.showSeconds || self.flashSeparators) ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];
 	[clockTimer setFireDate: [NSDate date]];
 	self.window.level = NSMainMenuWindowLevel;
 	self.window.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces;
@@ -313,7 +315,18 @@ static void	PowerStateChangedCallback( void* context )
 		[self appendBatteryStateTo: currInfoString];
 	
 	NSDate			*	currentTime = [NSDate date];
-	[self appendString: [sTimeFormatter stringFromDate: currentTime] size: 0 toAttributedString: currInfoString];
+	NSString		*	timeStr = [sTimeFormatter stringFromDate: currentTime];
+	if( self.flashSeparators && (((int)currentTime.timeIntervalSinceReferenceDate) % 2) == 0  )
+	{
+		static NSString*	sColonWideSpace = nil;
+		if( !sColonWideSpace )
+		{
+			uint8_t		colonWideSpaceChar[3] = { 0xE2, 0x80, 0x88 };
+			sColonWideSpace = [[NSString alloc] initWithBytes: &colonWideSpaceChar length: sizeof(colonWideSpaceChar) encoding: NSUTF8StringEncoding];
+		}
+		timeStr = [timeStr stringByReplacingOccurrencesOfString: @":" withString: sColonWideSpace];
+	}
+	[self appendString: timeStr size: 0 toAttributedString: currInfoString];
 	
 	[self.timeField setAttributedStringValue: currInfoString];
 	[self.window layoutIfNeeded];
@@ -326,7 +339,7 @@ static void	PowerStateChangedCallback( void* context )
 	currentBox.origin.y = NSMaxY(screenFrame) -currentBox.size.height;
 	[self.window setFrame: currentBox display: YES];
 	
-	if( !self.showSeconds && sender )
+	if( !self.showSeconds && !self.flashSeparators && sender )
 	{
 		static NSCalendar	*	sGregorianCalendar = nil;
 		if( !sGregorianCalendar )
