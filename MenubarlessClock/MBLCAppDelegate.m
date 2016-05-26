@@ -137,7 +137,7 @@
 #define BATT_NONE_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryNone.pdf"
 
 
--(NSImage*)	batteryImageForLevel: (double)batteryFraction
+-(NSImage*)	batteryImageForLevel: (double)batteryFraction levelLow: (BOOL)levelLow
 {
 	/*
 		DISCLAIMER: It is bad style to just reference arbitrary images in a system folder. Apple may,
@@ -150,7 +150,6 @@
 	NSImage*		batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_FRAME_PATH];
 	return [NSImage imageWithSize: batteryImage.size flipped: NO drawingHandler: ^BOOL(NSRect dstRect)
 	{
-		BOOL			levelLow = batteryFraction <= 0.2;
 		NSImage*		leftCap = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_L_PATH : BATT_CAP_L_PATH];
 		NSImage*		middle = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_M_PATH : BATT_CAP_M_PATH];
 		NSImage*		rightCap = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_R_PATH : BATT_CAP_R_PATH];
@@ -201,14 +200,15 @@
 			NSImage *				batteryImage = nil;
 			BOOL					isCharging = [dict[@"Is Charging"] boolValue];
 			BOOL					isMissing = ![dict[@"Is Present"] boolValue];
+			BOOL					shouldWarn = IOPSGetBatteryWarningLevel() != kIOPSLowBatteryWarningNone;
 			if( isMissing )
 				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_NONE_PATH];
 			else if( isCharging && batteryPercentage >= MAX_BATTERY_LEVEL )
 				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_PLUGGED_FULL_PATH];
 			else if( isCharging )
 				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_CHARGING_PATH];
-			else if( !self.showBatteryLevelOnlyWhenLow || batteryPercentage < 20 )
-				batteryImage = [self batteryImageForLevel: batteryFraction];
+			else if( !self.showBatteryLevelOnlyWhenLow || shouldWarn )
+				batteryImage = [self batteryImageForLevel: batteryFraction levelLow: shouldWarn];
 			if( batteryImage )
 			{
 				NSTextAttachment*		att = [NSTextAttachment new];
