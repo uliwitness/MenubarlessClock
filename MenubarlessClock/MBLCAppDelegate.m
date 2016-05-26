@@ -10,6 +10,11 @@
 #import <IOKit/ps/IOPowerSources.h>
 
 
+// Sometimes the charger stops at 99%, but it's technically full, so we
+//	treat that level as "full" already:
+#define MAX_BATTERY_LEVEL		99
+
+
 @interface MBLCContentView : NSView
 
 @property (strong) NSTrackingArea*		trackingArea;
@@ -105,6 +110,9 @@
 #define BATT_RED_L_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-L.pdf"
 #define BATT_RED_M_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-M.pdf"
 #define BATT_RED_R_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-R.pdf"
+#define BATT_CHARGING_PATH	@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryCharging.pdf"
+#define BATT_PLUGGED_FULL_PATH	@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryChargedAndPlugged.pdf"
+#define BATT_NONE_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryNone.pdf"
 
 
 -(NSImage*)	batteryImageForLevel: (double)batteryFraction
@@ -167,15 +175,30 @@
 		{
 			double	batteryFraction = [dict[@"Current Capacity"] doubleValue] / [dict[@"Max Capacity"] doubleValue];
 			int	batteryPercentage = batteryFraction * 100.0;
-			if( !self.showBatteryLevelOnlyWhenLow || batteryPercentage < 20 )
+			
+			NSImage *				batteryImage = nil;
+			BOOL					isCharging = [dict[@"Is Charging"] boolValue];
+			BOOL					isMissing = ![dict[@"Is Present"] boolValue];
+			if( isMissing )
+				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_NONE_PATH];
+			else if( isCharging && batteryPercentage >= MAX_BATTERY_LEVEL )
+				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_PLUGGED_FULL_PATH];
+			else if( isCharging )
+				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_CHARGING_PATH];
+			else if( !self.showBatteryLevelOnlyWhenLow || batteryPercentage < 20 )
+				batteryImage = [self batteryImageForLevel: batteryFraction];
+			if( batteryImage )
 			{
 				NSTextAttachment*		att = [NSTextAttachment new];
 				NSTextAttachmentCell*	attCell = [NSTextAttachmentCell new];
-				attCell.image = [self batteryImageForLevel: batteryFraction];
+				attCell.image = batteryImage;
 				att.attachmentCell = attCell;
-//				[self appendString: [NSString stringWithFormat: @"%d %% ", batteryPercentage] toAttributedString: currInfoString];
+				if( isCharging && batteryPercentage < MAX_BATTERY_LEVEL )	// Don't waste screen space showing what user can tell from icon.
+				{
+					[self appendString: [NSString stringWithFormat: @"%d %% ", batteryPercentage] size: 12 toAttributedString: currInfoString];
+				}
 				[currInfoString appendAttributedString: [NSAttributedString attributedStringWithAttachment: att]];
-				[self appendString: [NSString stringWithFormat: @"  "] toAttributedString: currInfoString];
+				[self appendString: [NSString stringWithFormat: @"  "] size: 0 toAttributedString: currInfoString];
 			}
 			break;
 		}
@@ -202,9 +225,15 @@
 }
 
 
--(void)	appendString: (NSString*)newStr toAttributedString: (NSMutableAttributedString*)attrStr
+-(void)	appendString: (NSString*)newStr size: (CGFloat)inSize toAttributedString: (NSMutableAttributedString*)attrStr
 {
-	NSAttributedString	*newAttrStr = [[NSAttributedString alloc] initWithString: newStr attributes: @{ NSFontAttributeName: self.timeField.font }];
+	NSFont			*	theFont = self.timeField.font;
+	if( inSize > 0 )
+	{
+		NSFont	*	smallerFont = [[NSFontManager sharedFontManager] convertFont: theFont toSize: inSize];
+		if( smallerFont ) theFont = smallerFont;
+	}
+	NSAttributedString	*newAttrStr = [[NSAttributedString alloc] initWithString: newStr attributes: @{ NSFontAttributeName: theFont }];
 	[attrStr appendAttributedString: newAttrStr];
 }
 
@@ -226,7 +255,7 @@
 		[self appendBatteryStateTo: currInfoString];
 	
 	NSDate			*	currentTime = [NSDate date];
-	[self appendString: [sTimeFormatter stringFromDate: currentTime] toAttributedString: currInfoString];
+	[self appendString: [sTimeFormatter stringFromDate: currentTime] size: 0 toAttributedString: currInfoString];
 	
 	[self.timeField setAttributedStringValue: currInfoString];
 	[self.window layoutIfNeeded];
