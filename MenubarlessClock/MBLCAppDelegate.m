@@ -222,6 +222,21 @@ static void	PowerStateChangedCallback( void* context )
 	}];
 }
 
+-(NSImage *) image: (NSImage *)image darkModeEnabled: (BOOL)darkModeEnabled
+{
+    if( !darkModeEnabled ) {
+        return image;
+    }
+    
+    NSRect	imageBounds = NSMakeRect(0, 0, image.size.width, image.size.height);
+    NSImage*	copiedImage = [image copy];
+    [copiedImage lockFocus];
+    [[NSColor whiteColor] set];
+    NSRectFillUsingOperation(imageBounds, NSCompositeSourceAtop);
+    [copiedImage unlockFocus];
+    return copiedImage;
+}
+
 
 -(void)		appendBatteryStateTo: (NSMutableAttributedString*)currInfoString
 {
@@ -251,7 +266,7 @@ static void	PowerStateChangedCallback( void* context )
 			{
 				NSTextAttachment*		att = [NSTextAttachment new];
 				NSTextAttachmentCell*	attCell = [NSTextAttachmentCell new];
-				attCell.image = batteryImage;
+				attCell.image = [self image:batteryImage darkModeEnabled:self.darkModeEnabled];
 				att.attachmentCell = attCell;
 				if( isCharging && batteryPercentage < MAX_BATTERY_LEVEL )	// Don't waste screen space showing what user can tell from icon.
 				{
@@ -373,6 +388,7 @@ static void	PowerStateChangedCallback( void* context )
 		self.window.backgroundColor = [NSColor colorWithWhite: 1.0 alpha: 0.9];
 		self.timeField.textColor = [NSColor blackColor];
 	}
+    [self updateClock:nil];
 }
 
 @end
