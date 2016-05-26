@@ -15,6 +15,15 @@
 #define MAX_BATTERY_LEVEL		99
 
 
+// The "nub" on the battery's right side and the right edge is this wide
+//	(in Quartz points) in Apple's graphics:
+#define BATT_RIGHT_END_WIDTH	5
+
+
+// The left edge is this wide (in Quartz points) in Apple's graphics:
+#define BATT_LEFT_END_WIDTH		2
+
+
 @interface MBLCContentView : NSView
 
 @property (strong) NSTrackingArea*		trackingArea;
@@ -74,14 +83,19 @@
 
 @implementation MBLCAppDelegate
 
-- (void)	applicationDidFinishLaunching: (NSNotification *)aNotification
+
+-(void)	loadDefaults
 {
 	NSUserDefaults*	ud = [[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"];
 	[ud registerDefaults: [NSDictionary dictionaryWithContentsOfURL: [NSBundle.mainBundle URLForResource: @"InitialDefaults" withExtension: @"plist"]]];
 	self.showSeconds = [ud boolForKey: @"MBLCShowSeconds"];
 	self.showBatteryLevel = [ud boolForKey: @"MBLCShowBatteryLevel"];
 	self.showBatteryLevelOnlyWhenLow = [ud boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
-	
+}
+
+
+-(void)	setUpClockWindow
+{
 	self.window.alphaValue = 0.0;
 	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: self.showSeconds ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];
 	[clockTimer setFireDate: [NSDate date]];
@@ -98,8 +112,16 @@
 		self.timeField.font = monospaceFont;
 	}
 	
+	// So we notice when user changes the "dark mode" system setting:
 	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(adaptUIToDarkMode) name:@"AppleInterfaceThemeChangedNotification" object:nil];
 	[self adaptUIToDarkMode];
+}
+
+
+- (void)	applicationDidFinishLaunching: (NSNotification *)aNotification
+{
+	[self loadDefaults];
+	[self setUpClockWindow];
 }
 
 
@@ -138,11 +160,11 @@
 		NSRect	leftCapBox = NSZeroRect, midBox = NSZeroRect, rightCapBox = NSZeroRect;
 		leftCapBox.size.height = middle.size.height;
 		leftCapBox.origin.y = trunc((batteryBox.size.height -leftCapBox.size.height) / 2.0);
-		leftCapBox.origin.x += 2;
+		leftCapBox.origin.x += BATT_LEFT_END_WIDTH;
 		leftCapBox.size.width = leftCap.size.width;
 		
 		rightCapBox = leftCapBox;
-		rightCapBox.origin.x = batteryBox.size.width -rightCapBox.size.width - 5;
+		rightCapBox.origin.x = batteryBox.size.width -rightCapBox.size.width - BATT_RIGHT_END_WIDTH;
 		
 		midBox = leftCapBox;
 		midBox.origin.x = NSMaxX(leftCapBox);
