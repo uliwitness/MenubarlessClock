@@ -228,14 +228,14 @@ static void	PowerStateChangedCallback( void* context )
 	for( id currSource in powerSources )
 	{
 		NSDictionary* dict = (__bridge NSDictionary *)(IOPSGetPowerSourceDescription( (__bridge CFTypeRef)psInfo, (__bridge CFTypeRef)(currSource) ));
-		if( [dict[@"Type"] isEqualToString: @"InternalBattery"] )
+		if( [dict[@kIOPSTypeKey] isEqualToString: @kIOPSInternalBatteryType] )
 		{
-			double	batteryFraction = [dict[@"Current Capacity"] doubleValue] / [dict[@"Max Capacity"] doubleValue];
+			double	batteryFraction = [dict[@kIOPSCurrentCapacityKey] doubleValue] / [dict[@kIOPSMaxCapacityKey] doubleValue];
 			int	batteryPercentage = batteryFraction * 100.0;
 			
 			NSImage *				batteryImage = nil;
-			BOOL					isCharging = [dict[@"Is Charging"] boolValue];
-			BOOL					isMissing = ![dict[@"Is Present"] boolValue];
+			BOOL					isCharging = [dict[@kIOPSIsChargingKey] boolValue];
+			BOOL					isMissing = ![dict[@kIOPSIsPresentKey] boolValue];
 			BOOL					shouldWarn = IOPSGetBatteryWarningLevel() != kIOPSLowBatteryWarningNone;
 			if( isMissing )
 				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_NONE_PATH];
