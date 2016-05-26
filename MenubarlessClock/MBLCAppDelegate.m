@@ -71,9 +71,11 @@
 
 - (void)	applicationDidFinishLaunching: (NSNotification *)aNotification
 {
-	self.showSeconds = [[[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"] boolForKey: @"MBLCShowSeconds"];
-	self.showBatteryLevel = [[[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"] boolForKey: @"MBLCShowBatteryLevel"];
-	self.showBatteryLevelOnlyWhenLow = [[[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"] boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
+	NSUserDefaults*	ud = [[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"];
+	[ud registerDefaults: [NSDictionary dictionaryWithContentsOfURL: [NSBundle.mainBundle URLForResource: @"InitialDefaults" withExtension: @"plist"]]];
+	self.showSeconds = [ud boolForKey: @"MBLCShowSeconds"];
+	self.showBatteryLevel = [ud boolForKey: @"MBLCShowBatteryLevel"];
+	self.showBatteryLevelOnlyWhenLow = [ud boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
 	
 	self.window.alphaValue = 0.0;
 	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: self.showSeconds ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];

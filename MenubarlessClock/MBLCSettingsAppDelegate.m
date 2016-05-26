@@ -23,6 +23,12 @@
 
 @implementation MBLCSettingsAppDelegate
 
+-(void)	applicationDidFinishLaunching:(NSNotification *)notification
+{
+	[NSUserDefaults.standardUserDefaults registerDefaults: [NSDictionary dictionaryWithContentsOfURL: [NSBundle.mainBundle URLForResource: @"InitialDefaults" withExtension: @"plist"]]];
+}
+
+
 -(BOOL) applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender
 {
 	return YES;

@@ -18,6 +18,8 @@
 		5589F74B1CF269F300ABD616 /* MenubarlessClock Helper.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 550AB8A11CF0812A00338587 /* MenubarlessClock Helper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5589F74D1CF26C0000ABD616 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5589F74C1CF26C0000ABD616 /* ServiceManagement.framework */; };
 		55A801361CF6842400C44356 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A801351CF6842400C44356 /* IOKit.framework */; };
+		55A801381CF7121700C44356 /* InitialDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55A801371CF7121700C44356 /* InitialDefaults.plist */; };
+		55A801391CF7121700C44356 /* InitialDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 55A801371CF7121700C44356 /* InitialDefaults.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,7 @@
 		5589F7451CF2655400ABD616 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HelperMainMenu.xib; sourceTree = "<group>"; };
 		5589F74C1CF26C0000ABD616 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		55A801351CF6842400C44356 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		55A801371CF7121700C44356 /* InitialDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = InitialDefaults.plist; path = MenubarlessClock/InitialDefaults.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +90,7 @@
 			children = (
 				550AB8A31CF0812A00338587 /* MenubarlessClock Helper */,
 				5589F7341CF263AC00ABD616 /* MenubarlessClock */,
+				55A801371CF7121700C44356 /* InitialDefaults.plist */,
 				550AB8A21CF0812A00338587 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -227,6 +231,7 @@
 			files = (
 				550AB8AB1CF0812A00338587 /* HelperAssets.xcassets in Resources */,
 				5589F7461CF2655400ABD616 /* HelperMainMenu.xib in Resources */,
+				55A801381CF7121700C44356 /* InitialDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,6 +241,7 @@
 			files = (
 				5589F73C1CF263AC00ABD616 /* Assets.xcassets in Resources */,
 				5589F73F1CF263AC00ABD616 /* MainMenu.xib in Resources */,
+				55A801391CF7121700C44356 /* InitialDefaults.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
