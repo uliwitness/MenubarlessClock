@@ -96,6 +96,56 @@
 }
 
 
+#define BATT_FRAME_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryEmpty.pdf"
+#define BATT_CAP_L_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapB-L.pdf"
+#define BATT_CAP_M_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapB-M.pdf"
+#define BATT_CAP_R_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapB-R.pdf"
+#define BATT_RED_L_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-L.pdf"
+#define BATT_RED_M_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-M.pdf"
+#define BATT_RED_R_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-R.pdf"
+
+
+-(NSImage*)	batteryImageForLevel: (double)batteryFraction
+{
+	NSImage*		batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_FRAME_PATH];
+	return [NSImage imageWithSize: batteryImage.size flipped: NO drawingHandler: ^BOOL(NSRect dstRect)
+	{
+		BOOL			levelLow = batteryFraction <= 0.2;
+		NSImage*		leftCap = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_L_PATH : BATT_CAP_L_PATH];
+		NSImage*		middle = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_M_PATH : BATT_CAP_M_PATH];
+		NSImage*		rightCap = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_R_PATH : BATT_CAP_R_PATH];
+		
+		// Calculate rectangles for the various parts:
+		NSRect	batteryBox = { NSZeroPoint, batteryImage.size };
+		NSRect	leftCapBox = NSZeroRect, midBox = NSZeroRect, rightCapBox = NSZeroRect;
+		leftCapBox.size.height = middle.size.height;
+		leftCapBox.origin.y = trunc((batteryBox.size.height -leftCapBox.size.height) / 2.0);
+		leftCapBox.origin.x += 2;
+		leftCapBox.size.width = leftCap.size.width;
+		
+		rightCapBox = leftCapBox;
+		rightCapBox.origin.x = batteryBox.size.width -rightCapBox.size.width - 5;
+		
+		midBox = leftCapBox;
+		midBox.origin.x = NSMaxX(leftCapBox);
+		midBox.size.width = NSMinX(rightCapBox) -midBox.origin.x;
+
+		NSRect	capArea = leftCapBox;
+		capArea.size.width = (NSMaxX(rightCapBox) -capArea.origin.x) * batteryFraction;
+		
+		// Draw!
+		[batteryImage drawAtPoint: NSZeroPoint fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
+
+		[NSBezierPath clipRect: capArea];	// Make sure level capsule only occupies area corresponding to level.
+		
+		[leftCap drawAtPoint: leftCapBox.origin fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
+		[middle drawInRect: midBox fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
+		[rightCap drawAtPoint: rightCapBox.origin fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
+		return YES;
+	}];
+}
+
+
 -(void)		appendBatteryStateTo: (NSMutableAttributedString*)currInfoString
 {
 	CFTypeRef			psInfo = IOPSCopyPowerSourcesInfo();
@@ -105,10 +155,17 @@
 		NSDictionary* dict = (__bridge NSDictionary *)(IOPSGetPowerSourceDescription( psInfo, (__bridge CFTypeRef)(currSource) ));
 		if( [dict[@"Type"] isEqualToString: @"InternalBattery"] )
 		{
-			int	batteryPercentage = ([dict[@"Current Capacity"] doubleValue] / [dict[@"Max Capacity"] doubleValue]) * 100.0;
+			double	batteryFraction = [dict[@"Current Capacity"] doubleValue] / [dict[@"Max Capacity"] doubleValue];
+			int	batteryPercentage = batteryFraction * 100.0;
 			if( !self.showBatteryLevelOnlyWhenLow || batteryPercentage < 20 )
 			{
-				[self appendString: [NSString stringWithFormat: @"%d %%  ", batteryPercentage] toAttributedString: currInfoString];
+				NSTextAttachment*		att = [NSTextAttachment new];
+				NSTextAttachmentCell*	attCell = [NSTextAttachmentCell new];
+				attCell.image = [self batteryImageForLevel: batteryFraction];
+				att.attachmentCell = attCell;
+//				[self appendString: [NSString stringWithFormat: @"%d %% ", batteryPercentage] toAttributedString: currInfoString];
+				[currInfoString appendAttributedString: [NSAttributedString attributedStringWithAttachment: att]];
+				[self appendString: [NSString stringWithFormat: @"  "] toAttributedString: currInfoString];
 			}
 			break;
 		}
