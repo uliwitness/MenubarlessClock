@@ -17,6 +17,7 @@
 		5589F7461CF2655400ABD616 /* HelperMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5589F7441CF2655400ABD616 /* HelperMainMenu.xib */; };
 		5589F74B1CF269F300ABD616 /* MenubarlessClock Helper.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = 550AB8A11CF0812A00338587 /* MenubarlessClock Helper.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5589F74D1CF26C0000ABD616 /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5589F74C1CF26C0000ABD616 /* ServiceManagement.framework */; };
+		55A801361CF6842400C44356 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55A801351CF6842400C44356 /* IOKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		5589F7401CF263AC00ABD616 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5589F7451CF2655400ABD616 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HelperMainMenu.xib; sourceTree = "<group>"; };
 		5589F74C1CF26C0000ABD616 /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		55A801351CF6842400C44356 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55A801361CF6842400C44356 /* IOKit.framework in Frameworks */,
 				5589F74D1CF26C0000ABD616 /* ServiceManagement.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,7 +85,6 @@
 		550AB8981CF0812A00338587 = {
 			isa = PBXGroup;
 			children = (
-				5589F74C1CF26C0000ABD616 /* ServiceManagement.framework */,
 				550AB8A31CF0812A00338587 /* MenubarlessClock Helper */,
 				5589F7341CF263AC00ABD616 /* MenubarlessClock */,
 				550AB8A21CF0812A00338587 /* Products */,
@@ -107,6 +109,7 @@
 				550AB8AF1CF0812A00338587 /* HelperInfo.plist */,
 				5589F7441CF2655400ABD616 /* HelperMainMenu.xib */,
 				550AB8A71CF0812A00338587 /* Supporting Files */,
+				55A801351CF6842400C44356 /* IOKit.framework */,
 			);
 			name = "MenubarlessClock Helper";
 			path = MenubarlessClock;
@@ -125,10 +128,11 @@
 			children = (
 				5589F7351CF263AC00ABD616 /* MBLCSettingsAppDelegate.h */,
 				5589F7361CF263AC00ABD616 /* MBLCSettingsAppDelegate.m */,
-				5589F73B1CF263AC00ABD616 /* Assets.xcassets */,
 				5589F73D1CF263AC00ABD616 /* MainMenu.xib */,
+				5589F73B1CF263AC00ABD616 /* Assets.xcassets */,
 				5589F7401CF263AC00ABD616 /* Info.plist */,
 				5589F7381CF263AC00ABD616 /* Supporting Files */,
+				5589F74C1CF26C0000ABD616 /* ServiceManagement.framework */,
 			);
 			path = MenubarlessClock;
 			sourceTree = "<group>";
@@ -443,6 +447,7 @@
 				5589F7431CF263AC00ABD616 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

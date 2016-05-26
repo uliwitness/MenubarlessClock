@@ -696,12 +696,36 @@
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="showSeconds" id="cnE-w4-2me"/>
                         </connections>
                     </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="Mmo-CY-7To">
+                        <rect key="frame" x="18" y="101" width="138" height="18"/>
+                        <buttonCell key="cell" type="check" title="Show Battery Level" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="MTo-zM-VZD">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="showBatteryLevel" id="sam-RT-33f"/>
+                        </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="sUr-Cw-7ZI">
+                        <rect key="frame" x="34" y="75" width="114" height="18"/>
+                        <buttonCell key="cell" type="check" title="Only when Low" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="K73-aE-6Jc">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="showBatteryLevelOnlyWhenLow" id="HOP-4n-abJ"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="hRT-q3-3rC" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="3xp-bB-T7H"/>
+                    <constraint firstItem="sUr-Cw-7ZI" firstAttribute="leading" secondItem="Mmo-CY-7To" secondAttribute="leading" constant="16" id="Fzi-gR-HPX"/>
+                    <constraint firstItem="sUr-Cw-7ZI" firstAttribute="top" secondItem="Mmo-CY-7To" secondAttribute="bottom" constant="12" id="ScW-o5-Rey"/>
                     <constraint firstItem="wqL-WD-aBy" firstAttribute="top" secondItem="hRT-q3-3rC" secondAttribute="bottom" constant="12" id="Tvc-Um-Rad"/>
                     <constraint firstItem="wqL-WD-aBy" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="kTF-Sr-Had"/>
+                    <constraint firstItem="Mmo-CY-7To" firstAttribute="top" secondItem="wqL-WD-aBy" secondAttribute="bottom" constant="12" id="obU-nL-CPO"/>
                     <constraint firstItem="hRT-q3-3rC" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="onN-AA-8Em"/>
+                    <constraint firstItem="Mmo-CY-7To" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="vxm-mu-FGO"/>
                 </constraints>
             </view>
             <point key="canvasLocation" x="263" y="61.5"/>

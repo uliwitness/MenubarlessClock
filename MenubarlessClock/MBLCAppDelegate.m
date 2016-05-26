@@ -7,6 +7,7 @@
 //
 
 #import "MBLCAppDelegate.h"
+#import <IOKit/ps/IOPowerSources.h>
 
 
 @interface MBLCContentView : NSView
@@ -61,13 +62,18 @@
 @property (weak) IBOutlet NSWindow *	window;
 @property (weak) IBOutlet NSTextField *	timeField;
 @property (assign) BOOL					showSeconds;
+@property (assign) BOOL					showBatteryLevel;
+@property (assign) BOOL					showBatteryLevelOnlyWhenLow;
 
 @end
 
 @implementation MBLCAppDelegate
 
-- (void)	applicationDidFinishLaunching: (NSNotification *)aNotification {
+- (void)	applicationDidFinishLaunching: (NSNotification *)aNotification
+{
 	self.showSeconds = [[[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"] boolForKey: @"MBLCShowSeconds"];
+	self.showBatteryLevel = [[[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"] boolForKey: @"MBLCShowBatteryLevel"];
+	self.showBatteryLevelOnlyWhenLow = [[[NSUserDefaults alloc] initWithSuiteName: @"com.thevoidsoftware.MenubarlessClock"] boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
 	
 	self.window.alphaValue = 0.0;
 	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: self.showSeconds ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];
@@ -81,12 +87,58 @@
 	
 	if ([NSFont.class respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)])
 	{
-		NSFont *monospaceFont = [NSFont monospacedDigitSystemFontOfSize:14.0 weight:NSFontWeightRegular];
+		NSFont *monospaceFont = [NSFont monospacedDigitSystemFontOfSize: 14.0 weight: NSFontWeightMedium];
 		self.timeField.font = monospaceFont;
 	}
 	
 	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(adaptUIToDarkMode) name:@"AppleInterfaceThemeChangedNotification" object:nil];
 	[self adaptUIToDarkMode];
+}
+
+
+-(void)		appendBatteryStateTo: (NSMutableAttributedString*)currInfoString
+{
+	CFTypeRef			psInfo = IOPSCopyPowerSourcesInfo();
+	NSArray*			powerSources = (__bridge NSArray *)(IOPSCopyPowerSourcesList(psInfo));
+	for( id currSource in powerSources )
+	{
+		NSDictionary* dict = (__bridge NSDictionary *)(IOPSGetPowerSourceDescription( psInfo, (__bridge CFTypeRef)(currSource) ));
+		if( [dict[@"Type"] isEqualToString: @"InternalBattery"] )
+		{
+			int	batteryPercentage = ([dict[@"Current Capacity"] doubleValue] / [dict[@"Max Capacity"] doubleValue]) * 100.0;
+			if( !self.showBatteryLevelOnlyWhenLow || batteryPercentage < 20 )
+			{
+				[self appendString: [NSString stringWithFormat: @"%d %%  ", batteryPercentage] toAttributedString: currInfoString];
+			}
+			break;
+		}
+//		Example for battery dictionary contents:
+//		{
+//			"Battery Provides Time Remaining" = 1;
+//			BatteryHealth = Good;
+//			Current = 137;
+//			"Current Capacity" = 100;
+//			DesignCycleCount = 1000;
+//			"Hardware Serial Number" = D8650920127FQM6B0;
+//			"Is Charged" = 1;
+//			"Is Charging" = 0;
+//			"Is Present" = 1;
+//			"Max Capacity" = 100;
+//			Name = "InternalBattery-0";
+//			"Power Source State" = "AC Power";
+//			"Time to Empty" = 0;
+//			"Time to Full Charge" = 0;
+//			"Transport Type" = Internal;
+//			Type = InternalBattery;
+//		}
+	}
+}
+
+
+-(void)	appendString: (NSString*)newStr toAttributedString: (NSMutableAttributedString*)attrStr
+{
+	NSAttributedString	*newAttrStr = [[NSAttributedString alloc] initWithString: newStr attributes: @{ NSFontAttributeName: self.timeField.font }];
+	[attrStr appendAttributedString: newAttrStr];
 }
 
 
@@ -100,8 +152,16 @@
 		sTimeFormatter.dateStyle = NSDateFormatterNoStyle;
 		sTimeFormatter.timeStyle = self.showSeconds ? NSDateFormatterMediumStyle : NSDateFormatterShortStyle;
 	}
-	NSDate		*	currentTime = [NSDate date];
-	[self.timeField setStringValue: [sTimeFormatter stringFromDate: currentTime]];
+	
+	NSMutableAttributedString	*	currInfoString = [NSMutableAttributedString new];
+	
+	if( self.showBatteryLevel )
+		[self appendBatteryStateTo: currInfoString];
+	
+	NSDate			*	currentTime = [NSDate date];
+	[self appendString: [sTimeFormatter stringFromDate: currentTime] toAttributedString: currInfoString];
+	
+	[self.timeField setAttributedStringValue: currInfoString];
 	[self.window layoutIfNeeded];
 	NSRect			currentBox = self.window.frame;
 	NSScreen	*	theScreen = self.window.screen;

@@ -90,6 +90,40 @@
 }
 
 
+-(BOOL)	showBatteryLevel
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey: @"MBLCShowBatteryLevel"];
+}
+
+
+-(void)	setShowBatteryLevel: (BOOL)inState
+{
+	NSRunningApplication	*	theHelper = [self helperApplication];
+	[theHelper terminate];
+	
+	[[NSUserDefaults standardUserDefaults] setBool: inState forKey: @"MBLCShowBatteryLevel"];
+	
+	[self performSelector: @selector(ensureRelaunchWorked:) withObject: theHelper afterDelay: 1.0];
+}
+
+
+-(BOOL)	showBatteryLevelOnlyWhenLow
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
+}
+
+
+-(void)	setShowBatteryLevelOnlyWhenLow: (BOOL)inState
+{
+	NSRunningApplication	*	theHelper = [self helperApplication];
+	[theHelper terminate];
+	
+	[[NSUserDefaults standardUserDefaults] setBool: inState forKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
+	
+	[self performSelector: @selector(ensureRelaunchWorked:) withObject: theHelper afterDelay: 1.0];
+}
+
+
 -(void)	ensureRelaunchWorked: (id)theHelper
 {
 	if( theHelper && ![self helperApplication] )	// Had a helper, don't have one now? Re-launch!

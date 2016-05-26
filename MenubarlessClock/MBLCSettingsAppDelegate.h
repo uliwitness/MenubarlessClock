@@ -11,6 +11,8 @@
 @interface MBLCSettingsAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) BOOL		launchAtLogin;
+@property (assign) BOOL		showBatteryLevel;
+@property (assign) BOOL		showBatteryLevelOnlyWhenLow;
 
 @end
 
