@@ -30,6 +30,13 @@
 #define BATT_LEFT_END_WIDTH		2
 
 
+@interface NSImage (Template)
+
+-(NSImage *)    mblc_imageFilledWithColor:(NSColor *)color;
+
+@end
+
+
 @interface MBLCContentView : NSView
 
 @property (strong) NSTrackingArea*		trackingArea;
@@ -186,8 +193,8 @@ static void	PowerStateChangedCallback( void* context )
 		personal use, and I'm not being paid for this. Pull requests with image donations gladly accepted.
 		(Remember: We can't copy Apple's graphics, they own the Copyright, don't submit them!)
 	*/
-	
-	NSImage*		batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_FRAME_PATH];
+
+	__block NSImage *		batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_FRAME_PATH];
 	return [NSImage imageWithSize: batteryImage.size flipped: NO drawingHandler: ^BOOL(NSRect dstRect)
 	{
 		NSImage*		leftCap = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_L_PATH : BATT_CAP_L_PATH];
@@ -213,13 +220,24 @@ static void	PowerStateChangedCallback( void* context )
 		capArea.size.width = (NSMaxX(rightCapBox) -capArea.origin.x) * batteryFraction;
 		
 		// Draw!
+        if ( self.darkModeEnabled ) {
+            batteryImage = [batteryImage mblc_imageFilledWithColor:[NSColor whiteColor]];
+        }
 		[batteryImage drawAtPoint: NSZeroPoint fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
 
 		[NSBezierPath clipRect: capArea];	// Make sure level capsule only occupies area corresponding to level.
-		
-		[leftCap drawAtPoint: leftCapBox.origin fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
-		[middle drawInRect: midBox fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
-		[rightCap drawAtPoint: rightCapBox.origin fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
+
+        NSImage *   indicator = [NSImage imageWithSize:batteryImage.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+            [leftCap drawAtPoint: leftCapBox.origin fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
+            [middle drawInRect: midBox fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
+            [rightCap drawAtPoint: rightCapBox.origin fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
+            return YES;
+        }];
+        if ( !levelLow && self.darkModeEnabled ) {
+            indicator = [indicator mblc_imageFilledWithColor:[NSColor whiteColor]];
+        }
+        [indicator drawAtPoint:CGPointZero fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+
 		return YES;
 	}];
 }
@@ -241,19 +259,24 @@ static void	PowerStateChangedCallback( void* context )
 			BOOL					isCharging = [dict[@kIOPSIsChargingKey] boolValue];
 			BOOL					isMissing = ![dict[@kIOPSIsPresentKey] boolValue];
 			BOOL					shouldWarn = IOPSGetBatteryWarningLevel() != kIOPSLowBatteryWarningNone;
+            BOOL                    drawsNormalBattery = !self.showBatteryLevelOnlyWhenLow || shouldWarn;
 			if( isMissing )
 				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_NONE_PATH];
 			else if( isCharging && batteryPercentage >= MAX_BATTERY_LEVEL )
 				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_PLUGGED_FULL_PATH];
 			else if( isCharging )
 				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_CHARGING_PATH];
-			else if( !self.showBatteryLevelOnlyWhenLow || shouldWarn )
+			else if( drawsNormalBattery )
 				batteryImage = [self batteryImageForLevel: batteryFraction levelLow: shouldWarn];
 			if( batteryImage )
 			{
 				NSTextAttachment*		att = [NSTextAttachment new];
 				NSTextAttachmentCell*	attCell = [NSTextAttachmentCell new];
-				attCell.image = batteryImage;
+                // normal battery image will take care of coloring itself
+                if ( !drawsNormalBattery && self.darkModeEnabled ) {
+                    batteryImage = [batteryImage mblc_imageFilledWithColor: [NSColor whiteColor]];
+                }
+                attCell.image = batteryImage;
 				att.attachmentCell = attCell;
 				if( self.showBatteryPercentage )	// Don't waste screen space showing what user can tell from icon.
 				{
@@ -375,6 +398,22 @@ static void	PowerStateChangedCallback( void* context )
 		self.window.backgroundColor = [NSColor colorWithWhite: 1.0 alpha: 0.9];
 		self.timeField.textColor = [NSColor blackColor];
 	}
+    [self updateClock:nil];
+}
+
+@end
+
+
+@implementation NSImage (Template)
+
+-(NSImage *)    mblc_imageFilledWithColor:(NSColor *)color {
+    NSRect	imageBounds = NSMakeRect(0, 0, self.size.width, self.size.height);
+    NSImage*	copiedImage = [self copy];
+    [copiedImage lockFocus];
+    [color set];
+    NSRectFillUsingOperation(imageBounds, NSCompositeSourceAtop);
+    [copiedImage unlockFocus];
+    return copiedImage;
 }
 
 @end
