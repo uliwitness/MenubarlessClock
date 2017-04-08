@@ -83,6 +83,7 @@
 @property (weak) IBOutlet NSTextField *	timeField;
 @property (assign) BOOL					showSeconds;
 @property (assign) BOOL					showBatteryLevel;
+@property (assign) BOOL					showBatteryPercentage;
 @property (assign) BOOL					showBatteryLevelOnlyWhenLow;
 @property (assign) BOOL					flashSeparators;
 
@@ -97,6 +98,7 @@
 	self.showSeconds = [ud boolForKey: @"MBLCShowSeconds"];
 	self.showBatteryLevel = [ud boolForKey: @"MBLCShowBatteryLevel"];
 	self.showBatteryLevelOnlyWhenLow = [ud boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
+    self.showBatteryPercentage = [[[NSUserDefaults alloc] initWithSuiteName:@"com.apple.menuextra.battery"] boolForKey:@"ShowPercent"];
 	self.flashSeparators = [ud boolForKey: @"MBLCFlashSeparators"];
 }
 
@@ -253,7 +255,7 @@ static void	PowerStateChangedCallback( void* context )
 				NSTextAttachmentCell*	attCell = [NSTextAttachmentCell new];
 				attCell.image = batteryImage;
 				att.attachmentCell = attCell;
-				if( isCharging && batteryPercentage < MAX_BATTERY_LEVEL )	// Don't waste screen space showing what user can tell from icon.
+				if( self.showBatteryPercentage )	// Don't waste screen space showing what user can tell from icon.
 				{
 					[self appendString: [NSString stringWithFormat: @"%d %% ", batteryPercentage] size: 12 toAttributedString: currInfoString];
 				}
