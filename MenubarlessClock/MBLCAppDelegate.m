@@ -172,16 +172,12 @@ static void	PowerStateChangedCallback( void* context )
 }
 
 
-#define BATT_FRAME_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryEmpty.pdf"
-#define BATT_CAP_L_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapB-L.pdf"
-#define BATT_CAP_M_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapB-M.pdf"
-#define BATT_CAP_R_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapB-R.pdf"
-#define BATT_RED_L_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-L.pdf"
-#define BATT_RED_M_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-M.pdf"
-#define BATT_RED_R_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryLevelCapR-R.pdf"
-#define BATT_CHARGING_PATH	@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryCharging.pdf"
-#define BATT_PLUGGED_FULL_PATH	@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryChargedAndPlugged.pdf"
-#define BATT_NONE_PATH		@"/System/Library/CoreServices/Menu Extras/Battery.menu/Contents/Resources/BatteryNone.pdf"
+#define BATT_FRAME_PATH		@"BatteryEmpty.pdf"
+#define BATT_FILL_PATH		@"BatteryFillB.pdf"
+#define BATT_RED_FILL_PATH	@"BatteryFillR.pdf"
+#define BATT_CHARGING_PATH	@"BatteryCharging.pdf"
+#define BATT_PLUGGED_FULL_PATH	@"BatteryChargedAndPlugged.pdf"
+#define BATT_NONE_PATH		@"BatteryNone.pdf"
 
 
 -(NSImage*)	batteryImageForLevel: (double)batteryFraction levelLow: (BOOL)levelLow
@@ -194,30 +190,16 @@ static void	PowerStateChangedCallback( void* context )
 		(Remember: We can't copy Apple's graphics, they own the Copyright, don't submit them!)
 	*/
 
-	__block NSImage *		batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_FRAME_PATH];
+	__block NSImage *		batteryImage = [NSImage imageNamed: BATT_FRAME_PATH];
 	return [NSImage imageWithSize: batteryImage.size flipped: NO drawingHandler: ^BOOL(NSRect dstRect)
 	{
-		NSImage*		leftCap = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_L_PATH : BATT_CAP_L_PATH];
-		NSImage*		middle = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_M_PATH : BATT_CAP_M_PATH];
-		NSImage*		rightCap = [[NSImage alloc] initWithContentsOfFile: levelLow ? BATT_RED_R_PATH : BATT_CAP_R_PATH];
-		
+		NSImage*		fillImage = [NSImage imageNamed: levelLow ? BATT_RED_FILL_PATH : BATT_FILL_PATH];
+        
 		// Calculate rectangles for the various parts:
 		NSRect	batteryBox = { NSZeroPoint, batteryImage.size };
-		NSRect	leftCapBox = NSZeroRect, midBox = NSZeroRect, rightCapBox = NSZeroRect;
-		leftCapBox.size.height = middle.size.height;
-		leftCapBox.origin.y = trunc((batteryBox.size.height -leftCapBox.size.height) / 2.0);
-		leftCapBox.origin.x += BATT_LEFT_END_WIDTH;
-		leftCapBox.size.width = leftCap.size.width;
-		
-		rightCapBox = leftCapBox;
-		rightCapBox.origin.x = batteryBox.size.width -rightCapBox.size.width - BATT_RIGHT_END_WIDTH;
-		
-		midBox = leftCapBox;
-		midBox.origin.x = NSMaxX(leftCapBox);
-		midBox.size.width = NSMinX(rightCapBox) -midBox.origin.x;
-
-		NSRect	capArea = leftCapBox;
-		capArea.size.width = (NSMaxX(rightCapBox) -capArea.origin.x) * batteryFraction;
+        
+		NSRect	capArea = batteryBox;
+		capArea.size.width *= batteryFraction;
 		
 		// Draw!
         if ( self.darkModeEnabled ) {
@@ -227,16 +209,10 @@ static void	PowerStateChangedCallback( void* context )
 
 		[NSBezierPath clipRect: capArea];	// Make sure level capsule only occupies area corresponding to level.
 
-        NSImage *   indicator = [NSImage imageWithSize:batteryImage.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
-            [leftCap drawAtPoint: leftCapBox.origin fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
-            [middle drawInRect: midBox fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
-            [rightCap drawAtPoint: rightCapBox.origin fromRect: NSZeroRect operation: NSCompositeSourceOver fraction: 1.0];
-            return YES;
-        }];
         if ( !levelLow && self.darkModeEnabled ) {
-            indicator = [indicator mblc_imageFilledWithColor:[NSColor whiteColor]];
+            fillImage = [fillImage mblc_imageFilledWithColor:[NSColor whiteColor]];
         }
-        [indicator drawAtPoint:CGPointZero fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+        [fillImage drawAtPoint:CGPointZero fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
 
 		return YES;
 	}];
@@ -260,20 +236,24 @@ static void	PowerStateChangedCallback( void* context )
 			BOOL					isMissing = ![dict[@kIOPSIsPresentKey] boolValue];
 			BOOL					shouldWarn = IOPSGetBatteryWarningLevel() != kIOPSLowBatteryWarningNone;
             BOOL                    drawsNormalBattery = !self.showBatteryLevelOnlyWhenLow || shouldWarn;
+            BOOL                    needsDarkModeAdjust = YES;
 			if( isMissing )
-				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_NONE_PATH];
+				batteryImage = [NSImage imageNamed: BATT_NONE_PATH];
 			else if( isCharging && batteryPercentage >= MAX_BATTERY_LEVEL )
-				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_PLUGGED_FULL_PATH];
+				batteryImage = [NSImage imageNamed: BATT_PLUGGED_FULL_PATH];
 			else if( isCharging )
-				batteryImage = [[NSImage alloc] initWithContentsOfFile: BATT_CHARGING_PATH];
+				batteryImage = [NSImage imageNamed: BATT_CHARGING_PATH];
 			else if( drawsNormalBattery )
+            {
 				batteryImage = [self batteryImageForLevel: batteryFraction levelLow: shouldWarn];
+                needsDarkModeAdjust = NO;
+            }
 			if( batteryImage )
 			{
-				NSTextAttachment*		att = [NSTextAttachment new];
+                NSTextAttachment*		att = [NSTextAttachment new];
 				NSTextAttachmentCell*	attCell = [NSTextAttachmentCell new];
                 // normal battery image will take care of coloring itself
-                if ( !drawsNormalBattery && self.darkModeEnabled ) {
+                if ( needsDarkModeAdjust && self.darkModeEnabled ) {
                     batteryImage = [batteryImage mblc_imageFilledWithColor: [NSColor whiteColor]];
                 }
                 attCell.image = batteryImage;
