@@ -47,15 +47,16 @@
 
 -(void)	drawRect:(NSRect)dirtyRect
 {
-	[[NSColor clearColor] set];
-	NSRectFill(self.bounds);
-	
 	[self.window.backgroundColor set];
+	NSRectFillUsingOperation(self.bounds, NSCompositingOperationCopy);
+
+	[NSColor.windowBackgroundColor set];
 	CGFloat		cornerRadius = 6;
 	NSRect		bezelBox = self.bounds;
 	bezelBox.size.height += cornerRadius;
 	bezelBox.size.width += cornerRadius;
-	[[NSBezierPath bezierPathWithRoundedRect: bezelBox xRadius: cornerRadius yRadius: cornerRadius] fill];
+	NSBezierPath *roundedPath = [NSBezierPath bezierPathWithRoundedRect: bezelBox xRadius: cornerRadius yRadius: cornerRadius];
+	[roundedPath fill];
 }
 
 
@@ -79,6 +80,10 @@
 -(void)	mouseExited: (NSEvent *)theEvent
 {
 	[self.window.animator setAlphaValue: 1.0];
+}
+
+-(BOOL) isOpaque {
+	return NO;
 }
 
 @end
@@ -112,19 +117,23 @@
 
 -(void)	setUpClockWindow
 {
-	self.window.alphaValue = 0.0;
+	NSWindow *wd = self.window;
+	wd.alphaValue = 0.0;
 	NSTimer*	clockTimer = [NSTimer scheduledTimerWithTimeInterval: (self.showSeconds || self.flashSeparators) ? 1.0 : 60.0 target: self selector: @selector(updateClock:) userInfo: nil repeats: YES];
 	[clockTimer setFireDate: [NSDate date]];
-	self.window.level = NSMainMenuWindowLevel;
-	self.window.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces;
-	self.window.opaque = NO;
-	[self.window orderFront: self];
-	self.window.animator.alphaValue = 1.0;
-	self.window.movable = NO;
+	wd.level = NSMainMenuWindowLevel;
+	wd.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces;
+	wd.backgroundColor = NSColor.clearColor;
+	wd.opaque = NO;
+	wd.titlebarAppearsTransparent = YES;
+	[wd orderFront: self];
+	wd.animator.alphaValue = 1.0;
+	wd.movable = NO;
+	//((MBLCContentView*) wd.contentView).material = NSVisualEffectMaterialMenu;
 	
 	if ([NSFont.class respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)])
 	{
-		NSFont *monospaceFont = [NSFont monospacedDigitSystemFontOfSize: 14.0 weight: NSFontWeightMedium];
+		NSFont *monospaceFont = [NSFont monospacedDigitSystemFontOfSize: 12.0 weight: NSFontWeightMedium];
 		self.timeField.font = monospaceFont;
 	}
 	
@@ -370,13 +379,13 @@ static void	PowerStateChangedCallback( void* context )
 {
 	if (self.darkModeEnabled)
 	{
-		self.window.backgroundColor = [NSColor colorWithWhite: 0.0 alpha: 0.7];
-		self.timeField.textColor = [NSColor whiteColor];
+		//self.window.backgroundColor = [NSColor colorWithWhite: 0.0 alpha: 0.7];
+		//self.timeField.textColor = [NSColor whiteColor];
 	}
 	else
 	{
-		self.window.backgroundColor = [NSColor colorWithWhite: 1.0 alpha: 0.9];
-		self.timeField.textColor = [NSColor blackColor];
+		//self.window.backgroundColor = [NSColor colorWithWhite: 1.0 alpha: 0.9];
+		//self.timeField.textColor = [NSColor blackColor];
 	}
     [self updateClock:nil];
 }

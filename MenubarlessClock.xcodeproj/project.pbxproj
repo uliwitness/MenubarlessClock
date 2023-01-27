@@ -10,6 +10,13 @@
 		550AB8A61CF0812A00338587 /* MBLCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 550AB8A51CF0812A00338587 /* MBLCAppDelegate.m */; };
 		550AB8A91CF0812A00338587 /* HelperMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 550AB8A81CF0812A00338587 /* HelperMain.m */; };
 		550AB8AB1CF0812A00338587 /* HelperAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 550AB8AA1CF0812A00338587 /* HelperAssets.xcassets */; };
+		552859AD298211ED0033B6B9 /* BatteryChargedAndPlugged.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 552859A6298211ED0033B6B9 /* BatteryChargedAndPlugged.pdf */; };
+		552859AE298211ED0033B6B9 /* BatteryDeadCropped.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 552859A7298211ED0033B6B9 /* BatteryDeadCropped.pdf */; };
+		552859AF298211ED0033B6B9 /* BatteryEmpty.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 552859A8298211ED0033B6B9 /* BatteryEmpty.pdf */; };
+		552859B0298211ED0033B6B9 /* BatteryCharging.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 552859A9298211ED0033B6B9 /* BatteryCharging.pdf */; };
+		552859B1298211ED0033B6B9 /* BatteryNone.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 552859AA298211ED0033B6B9 /* BatteryNone.pdf */; };
+		552859B2298211ED0033B6B9 /* BatteryFillR.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 552859AB298211ED0033B6B9 /* BatteryFillR.pdf */; };
+		552859B3298211ED0033B6B9 /* BatteryFillB.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 552859AC298211ED0033B6B9 /* BatteryFillB.pdf */; };
 		5589F7371CF263AC00ABD616 /* MBLCSettingsAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5589F7361CF263AC00ABD616 /* MBLCSettingsAppDelegate.m */; };
 		5589F73A1CF263AC00ABD616 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5589F7391CF263AC00ABD616 /* main.m */; };
 		5589F73C1CF263AC00ABD616 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5589F73B1CF263AC00ABD616 /* Assets.xcassets */; };
@@ -52,6 +59,13 @@
 		550AB8A81CF0812A00338587 /* HelperMain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HelperMain.m; sourceTree = "<group>"; };
 		550AB8AA1CF0812A00338587 /* HelperAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = HelperAssets.xcassets; sourceTree = "<group>"; };
 		550AB8AF1CF0812A00338587 /* HelperInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = HelperInfo.plist; sourceTree = "<group>"; };
+		552859A6298211ED0033B6B9 /* BatteryChargedAndPlugged.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = BatteryChargedAndPlugged.pdf; sourceTree = "<group>"; };
+		552859A7298211ED0033B6B9 /* BatteryDeadCropped.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = BatteryDeadCropped.pdf; sourceTree = "<group>"; };
+		552859A8298211ED0033B6B9 /* BatteryEmpty.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = BatteryEmpty.pdf; sourceTree = "<group>"; };
+		552859A9298211ED0033B6B9 /* BatteryCharging.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = BatteryCharging.pdf; sourceTree = "<group>"; };
+		552859AA298211ED0033B6B9 /* BatteryNone.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = BatteryNone.pdf; sourceTree = "<group>"; };
+		552859AB298211ED0033B6B9 /* BatteryFillR.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = BatteryFillR.pdf; sourceTree = "<group>"; };
+		552859AC298211ED0033B6B9 /* BatteryFillB.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = BatteryFillB.pdf; sourceTree = "<group>"; };
 		5589F7331CF263AC00ABD616 /* MenubarlessClock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MenubarlessClock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5589F7351CF263AC00ABD616 /* MBLCSettingsAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBLCSettingsAppDelegate.h; sourceTree = "<group>"; };
 		5589F7361CF263AC00ABD616 /* MBLCSettingsAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBLCSettingsAppDelegate.m; sourceTree = "<group>"; };
@@ -114,6 +128,13 @@
 				5589F7441CF2655400ABD616 /* HelperMainMenu.xib */,
 				550AB8A71CF0812A00338587 /* Supporting Files */,
 				55A801351CF6842400C44356 /* IOKit.framework */,
+				552859A6298211ED0033B6B9 /* BatteryChargedAndPlugged.pdf */,
+				552859A9298211ED0033B6B9 /* BatteryCharging.pdf */,
+				552859A7298211ED0033B6B9 /* BatteryDeadCropped.pdf */,
+				552859A8298211ED0033B6B9 /* BatteryEmpty.pdf */,
+				552859AC298211ED0033B6B9 /* BatteryFillB.pdf */,
+				552859AB298211ED0033B6B9 /* BatteryFillR.pdf */,
+				552859AA298211ED0033B6B9 /* BatteryNone.pdf */,
 			);
 			name = "MenubarlessClock Helper";
 			path = MenubarlessClock;
@@ -210,6 +231,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -229,9 +251,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				552859AE298211ED0033B6B9 /* BatteryDeadCropped.pdf in Resources */,
+				552859AD298211ED0033B6B9 /* BatteryChargedAndPlugged.pdf in Resources */,
+				552859B3298211ED0033B6B9 /* BatteryFillB.pdf in Resources */,
+				552859B1298211ED0033B6B9 /* BatteryNone.pdf in Resources */,
+				552859B2298211ED0033B6B9 /* BatteryFillR.pdf in Resources */,
+				552859AF298211ED0033B6B9 /* BatteryEmpty.pdf in Resources */,
 				550AB8AB1CF0812A00338587 /* HelperAssets.xcassets in Resources */,
 				5589F7461CF2655400ABD616 /* HelperMainMenu.xib in Resources */,
 				55A801381CF7121700C44356 /* InitialDefaults.plist in Resources */,
+				552859B0298211ED0033B6B9 /* BatteryCharging.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +413,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MenubarlessClock/HelperInfo.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thevoidsoftware.MenubarlessClock.helper;
 				PRODUCT_NAME = "MenubarlessClock Helper";
 			};
@@ -396,6 +426,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MenubarlessClock/HelperInfo.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				PRODUCT_BUNDLE_IDENTIFIER = com.thevoidsoftware.MenubarlessClock.helper;
 				PRODUCT_NAME = "MenubarlessClock Helper";
 			};
