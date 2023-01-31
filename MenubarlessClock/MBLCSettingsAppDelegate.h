@@ -13,6 +13,7 @@
 @property (assign) BOOL		launchAtLogin;
 @property (assign) BOOL		showBatteryLevel;
 @property (assign) BOOL		showBatteryLevelOnlyWhenLow;
+@property (assign) BOOL		showBatteryLevelOnlyWhenCharging;
 @property (assign) BOOL		flashSeparators;
 
 @end

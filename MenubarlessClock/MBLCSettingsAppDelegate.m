@@ -130,6 +130,23 @@
 }
 
 
+-(BOOL)	showBatteryLevelOnlyWhenCharging
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey: @"MBLCShowBatteryLevelOnlyWhenCharging"];
+}
+
+
+-(void)	setShowBatteryLevelOnlyWhenCharging: (BOOL)inState
+{
+	NSRunningApplication	*	theHelper = [self helperApplication];
+	[theHelper terminate];
+	
+	[[NSUserDefaults standardUserDefaults] setBool: inState forKey: @"MBLCShowBatteryLevelOnlyWhenCharging"];
+	
+	[self performSelector: @selector(ensureRelaunchWorked:) withObject: theHelper afterDelay: 1.0];
+}
+
+
 -(BOOL)	flashSeparators
 {
 	return [[NSUserDefaults standardUserDefaults] boolForKey: @"MBLCFlashSeparators"];

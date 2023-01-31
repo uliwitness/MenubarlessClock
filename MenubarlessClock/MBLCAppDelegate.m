@@ -50,13 +50,22 @@
 	[self.window.backgroundColor set];
 	NSRectFillUsingOperation(self.bounds, NSCompositingOperationCopy);
 
-	[NSColor.windowBackgroundColor set];
 	CGFloat		cornerRadius = 6;
 	NSRect		bezelBox = self.bounds;
 	bezelBox.size.height += cornerRadius;
 	bezelBox.size.width += cornerRadius;
 	NSBezierPath *roundedPath = [NSBezierPath bezierPathWithRoundedRect: bezelBox xRadius: cornerRadius yRadius: cornerRadius];
-	[roundedPath fill];
+		
+	NSURL *desktopImageURL = self.window.screen ? [NSWorkspace.sharedWorkspace desktopImageURLForScreen: self.window.screen] : nil;
+	NSImage * desktopImage = desktopImageURL ? [[NSImage alloc] initWithContentsOfURL: desktopImageURL] : nil;
+	if (desktopImage) { // When the image is random from a folder, we get `nil` here.
+		[NSColor.blackColor set];
+		[roundedPath fill];
+		[desktopImage drawAtPoint: NSZeroPoint fromRect:NSZeroRect operation:NSCompositingOperationDestinationIn fraction: 1.0];
+	} else {
+		[NSColor.windowBackgroundColor set];
+		[roundedPath fill];
+	}
 }
 
 
@@ -97,6 +106,7 @@
 @property (assign) BOOL					showBatteryLevel;
 @property (assign) BOOL					showBatteryPercentage;
 @property (assign) BOOL					showBatteryLevelOnlyWhenLow;
+@property (assign) BOOL					showBatteryLevelOnlyWhenCharging;
 @property (assign) BOOL					flashSeparators;
 
 @end
@@ -110,6 +120,7 @@
 	self.showSeconds = [ud boolForKey: @"MBLCShowSeconds"];
 	self.showBatteryLevel = [ud boolForKey: @"MBLCShowBatteryLevel"];
 	self.showBatteryLevelOnlyWhenLow = [ud boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
+	self.showBatteryLevelOnlyWhenCharging = [ud boolForKey: @"MBLCShowBatteryLevelOnlyWhenLow"];
     self.showBatteryPercentage = [[[NSUserDefaults alloc] initWithSuiteName:@"com.apple.menuextra.battery"] boolForKey:@"ShowPercent"];
 	self.flashSeparators = [ud boolForKey: @"MBLCFlashSeparators"];
 }
@@ -244,7 +255,7 @@ static void	PowerStateChangedCallback( void* context )
 			BOOL					isCharging = [dict[@kIOPSIsChargingKey] boolValue];
 			BOOL					isMissing = ![dict[@kIOPSIsPresentKey] boolValue];
 			BOOL					shouldWarn = IOPSGetBatteryWarningLevel() != kIOPSLowBatteryWarningNone;
-            BOOL                    drawsNormalBattery = !self.showBatteryLevelOnlyWhenLow || shouldWarn;
+            BOOL                    drawsNormalBattery = !self.showBatteryLevelOnlyWhenLow || shouldWarn || !self.showBatteryLevelOnlyWhenCharging;
             BOOL                    needsDarkModeAdjust = YES;
 			if( isMissing )
 				batteryImage = [NSImage imageNamed: BATT_NONE_PATH];
@@ -265,6 +276,9 @@ static void	PowerStateChangedCallback( void* context )
                 if ( needsDarkModeAdjust && self.darkModeEnabled ) {
                     batteryImage = [batteryImage mblc_imageFilledWithColor: [NSColor whiteColor]];
                 }
+				NSRect alignmentRect = batteryImage.alignmentRect;
+				alignmentRect.size.height += 0.5;
+				batteryImage.alignmentRect = alignmentRect;
                 attCell.image = batteryImage;
 				att.attachmentCell = attCell;
 				if( self.showBatteryPercentage )	// Don't waste screen space showing what user can tell from icon.

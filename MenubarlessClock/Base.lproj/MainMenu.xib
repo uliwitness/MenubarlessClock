@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -666,18 +667,19 @@
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="14" y="135"/>
         </menu>
         <window title="MenubarlessClock" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="328" height="158"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="800"/>
+            <rect key="contentRect" x="335" y="390" width="328" height="189"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1050"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="328" height="158"/>
+                <rect key="frame" x="0.0" y="0.0" width="328" height="196"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="hRT-q3-3rC">
-                        <rect key="frame" x="18" y="122" width="120" height="18"/>
+                        <rect key="frame" x="18" y="159" width="124" height="18"/>
                         <buttonCell key="cell" type="check" title="Launch At Login" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vm9-YJ-hRk">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -687,7 +689,7 @@
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="wqL-WD-aBy">
-                        <rect key="frame" x="18" y="96" width="112" height="18"/>
+                        <rect key="frame" x="18" y="131" width="116" height="18"/>
                         <buttonCell key="cell" type="check" title="Show Seconds" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="mC4-u6-IZY">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -697,7 +699,7 @@
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="PCl-6f-5bC">
-                        <rect key="frame" x="18" y="70" width="124" height="18"/>
+                        <rect key="frame" x="18" y="103" width="128" height="18"/>
                         <buttonCell key="cell" type="check" title="Flash Separators" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="yJd-gw-M6h">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -707,7 +709,7 @@
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Mmo-CY-7To">
-                        <rect key="frame" x="18" y="44" width="138" height="18"/>
+                        <rect key="frame" x="18" y="75" width="142" height="18"/>
                         <buttonCell key="cell" type="check" title="Show Battery Level" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="MTo-zM-VZD">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -717,7 +719,7 @@
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="sUr-Cw-7ZI">
-                        <rect key="frame" x="34" y="18" width="114" height="18"/>
+                        <rect key="frame" x="34" y="47" width="118" height="18"/>
                         <buttonCell key="cell" type="check" title="Only when Low" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="K73-aE-6Jc">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -727,22 +729,41 @@
                             <binding destination="Voe-Tx-rLC" name="value" keyPath="showBatteryLevelOnlyWhenLow" id="HOP-4n-abJ"/>
                         </connections>
                     </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="EUs-hP-lzR">
+                        <rect key="frame" x="34" y="19" width="149" height="18"/>
+                        <buttonCell key="cell" type="check" title="Only when Charging" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="VeX-xt-9Qm">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="Voe-Tx-rLC" name="enabled" keyPath="showBatteryLevel" id="f8A-mc-lUz"/>
+                            <binding destination="Voe-Tx-rLC" name="value" keyPath="showBatteryLevelOnlyWhenCharging" id="mtP-dX-aFH"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="hRT-q3-3rC" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" id="3xp-bB-T7H"/>
+                    <constraint firstItem="EUs-hP-lzR" firstAttribute="leading" secondItem="Mmo-CY-7To" secondAttribute="leading" constant="16" id="8C1-GP-mRA"/>
+                    <constraint firstItem="EUs-hP-lzR" firstAttribute="top" secondItem="sUr-Cw-7ZI" secondAttribute="bottom" constant="12" id="DFW-pK-HkM"/>
                     <constraint firstItem="PCl-6f-5bC" firstAttribute="top" secondItem="wqL-WD-aBy" secondAttribute="bottom" constant="12" id="ETn-pp-FbD"/>
                     <constraint firstItem="sUr-Cw-7ZI" firstAttribute="leading" secondItem="Mmo-CY-7To" secondAttribute="leading" constant="16" id="Fzi-gR-HPX"/>
-                    <constraint firstAttribute="bottom" secondItem="sUr-Cw-7ZI" secondAttribute="bottom" constant="20" id="G4f-uY-zcb"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="sUr-Cw-7ZI" secondAttribute="trailing" id="J1x-QT-RrK"/>
                     <constraint firstItem="Mmo-CY-7To" firstAttribute="top" secondItem="PCl-6f-5bC" secondAttribute="bottom" constant="12" id="Ql0-X5-7VT"/>
                     <constraint firstItem="sUr-Cw-7ZI" firstAttribute="top" secondItem="Mmo-CY-7To" secondAttribute="bottom" constant="12" id="ScW-o5-Rey"/>
                     <constraint firstItem="wqL-WD-aBy" firstAttribute="top" secondItem="hRT-q3-3rC" secondAttribute="bottom" constant="12" id="Tvc-Um-Rad"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="wqL-WD-aBy" secondAttribute="trailing" id="Zcn-TM-MKh"/>
+                    <constraint firstAttribute="bottom" secondItem="EUs-hP-lzR" secondAttribute="bottom" constant="20" symbolic="YES" id="eTC-4J-s4C"/>
                     <constraint firstItem="PCl-6f-5bC" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="eXD-9k-Emp"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="EUs-hP-lzR" secondAttribute="trailing" id="fqn-hn-DCh"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="hRT-q3-3rC" secondAttribute="trailing" id="hwE-tb-h4a"/>
                     <constraint firstItem="wqL-WD-aBy" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="kTF-Sr-Had"/>
                     <constraint firstItem="hRT-q3-3rC" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="onN-AA-8Em"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Mmo-CY-7To" secondAttribute="trailing" id="tX7-bb-w9C"/>
                     <constraint firstItem="Mmo-CY-7To" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" id="vxm-mu-FGO"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="PCl-6f-5bC" secondAttribute="trailing" id="xsN-gs-sBJ"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="263" y="46"/>
+            <point key="canvasLocation" x="63" y="336"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="Szp-C8-tZF"/>
     </objects>
