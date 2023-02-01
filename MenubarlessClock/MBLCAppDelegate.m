@@ -8,6 +8,14 @@
 
 #import "MBLCAppDelegate.h"
 #import <IOKit/ps/IOPowerSources.h>
+#import <CoreImage/CoreImage.h>
+#import "MenubarlessClock Helper-Bridging-Header.h"
+
+@interface NSWorkspace (MBLCDesktopImageSnapshot)
+
+-(NSImage*) desktopImageSnapshot;
+
+@end
 
 
 // Sometimes the charger stops at 99%, but it's technically full, so we
@@ -45,6 +53,52 @@
 
 @implementation MBLCContentView
 
+-(instancetype) initWithCoder:(NSCoder *)coder {
+	self = [super initWithCoder: coder];
+	if (self) {
+		self.wantsLayer = YES;
+		self.layer.backgroundColor = [NSColor clearColor].CGColor;
+		self.layer.masksToBounds = YES;
+		self.layerUsesCoreImageFilters = YES;
+		self.layer.needsDisplayOnBoundsChange = YES;
+		self.layer.maskedCorners = kCALayerMinXMinYCorner;
+		self.layer.cornerRadius = 6.0;
+
+		CIFilter *blurFilter = [CIFilter filterWithName: @"CIGaussianBlur"];
+		[blurFilter setDefaults];
+		[blurFilter setValue: @2.0 forKey: @"inputRadius"];
+
+		self.layer.filters = @[blurFilter];
+
+		[self.layer setNeedsDisplay];
+
+	}
+	return self;
+}
+
+-(instancetype) initWithFrame: (NSRect)frameRect {
+	self = [super initWithFrame: frameRect];
+	if (self) {
+		self.wantsLayer = YES;
+		self.layer.backgroundColor = [NSColor clearColor].CGColor;
+		self.layer.masksToBounds = YES;
+		self.layerUsesCoreImageFilters = YES;
+		self.layer.needsDisplayOnBoundsChange = YES;
+		self.layer.maskedCorners = kCALayerMinXMinYCorner;
+		self.layer.cornerRadius = 6.0;
+
+		CIFilter *blurFilter = [CIFilter filterWithName: @"CIGaussianBlur"];
+		[blurFilter setDefaults];
+		[blurFilter setValue: @4.0 forKey: @"inputRadius"];
+
+		self.layer.filters = @[blurFilter];
+
+		[self.layer setNeedsDisplay];
+
+	}
+	return self;
+}
+
 -(void)	drawRect:(NSRect)dirtyRect
 {
 	[self.window.backgroundColor set];
@@ -58,10 +112,17 @@
 		
 	NSURL *desktopImageURL = self.window.screen ? [NSWorkspace.sharedWorkspace desktopImageURLForScreen: self.window.screen] : nil;
 	NSImage * desktopImage = desktopImageURL ? [[NSImage alloc] initWithContentsOfURL: desktopImageURL] : nil;
+	if (!desktopImage) {
+		desktopImage = [[NSWorkspace sharedWorkspace] desktopImageSnapshot];
+	}
 	if (desktopImage) { // When the image is random from a folder, we get `nil` here.
-		[NSColor.blackColor set];
+		[NSColor.whiteColor set];
 		[roundedPath fill];
-		[desktopImage drawAtPoint: NSZeroPoint fromRect:NSZeroRect operation:NSCompositingOperationDestinationIn fraction: 1.0];
+		NSRect box = {
+			{ desktopImage.size.width -self.bounds.size.width, 0 },
+			self.bounds.size
+		};
+		[desktopImage drawAtPoint: NSZeroPoint fromRect: box operation:NSCompositingOperationSourceIn fraction: 1.0];
 	} else {
 		[NSColor.windowBackgroundColor set];
 		[roundedPath fill];
@@ -391,6 +452,7 @@ static void	PowerStateChangedCallback( void* context )
 
 - (void)	adaptUIToDarkMode
 {
+	self.timeField.textColor = [NSColor whiteColor];
 	if (self.darkModeEnabled)
 	{
 		//self.window.backgroundColor = [NSColor colorWithWhite: 0.0 alpha: 0.7];

@@ -668,19 +668,22 @@
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="14" y="141"/>
+            <point key="canvasLocation" x="81" y="35"/>
         </menu>
         <window title="MenubarlessClock" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" hasShadow="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titlebarAppearsTransparent="YES" id="QvC-M9-y7g" customClass="NSPanel">
             <windowStyleMask key="styleMask" nonactivatingPanel="YES" fullSizeContentView="YES"/>
             <windowPositionMask key="initialPositionMask" rightStrut="YES" topStrut="YES"/>
-            <rect key="contentRect" x="1234" y="778" width="46" height="22"/>
+            <rect key="contentRect" x="1234" y="778" width="92" height="22"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1050"/>
-            <view key="contentView" misplaced="YES" id="EiT-Mj-1SZ" customClass="MBLCContentView">
-                <rect key="frame" x="0.0" y="0.0" width="46" height="22"/>
+            <view key="contentView" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="45" height="22"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField wantsLayer="YES" horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z1T-yR-NmE">
-                        <rect key="frame" x="6" y="3" width="31" height="15"/>
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="x1z-Oy-91l" customClass="MBLCContentView">
+                        <rect key="frame" x="0.0" y="0.0" width="45" height="22"/>
+                    </customView>
+                    <textField wantsLayer="YES" horizontalHuggingPriority="1000" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="z1T-yR-NmE">
+                        <rect key="frame" x="7" y="4" width="31" height="15"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="--:--" id="0SS-lv-tfW">
                             <font key="font" metaFont="cellTitle"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -689,13 +692,17 @@
                     </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="z1T-yR-NmE" secondAttribute="bottom" constant="3" id="Yme-sr-3dR"/>
-                    <constraint firstItem="z1T-yR-NmE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="8" id="ihv-u3-1LC"/>
-                    <constraint firstAttribute="trailing" secondItem="z1T-yR-NmE" secondAttribute="trailing" constant="8" id="tKs-v0-4yv"/>
-                    <constraint firstItem="z1T-yR-NmE" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="1" id="xL2-x5-3OL"/>
+                    <constraint firstAttribute="trailing" secondItem="x1z-Oy-91l" secondAttribute="trailing" id="0tA-G4-U2M"/>
+                    <constraint firstItem="x1z-Oy-91l" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="5EG-Ru-dhO"/>
+                    <constraint firstItem="x1z-Oy-91l" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="BvV-Fg-Raw"/>
+                    <constraint firstItem="z1T-yR-NmE" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="9" id="PGC-Hg-XiP"/>
+                    <constraint firstItem="z1T-yR-NmE" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="3" id="Uzg-zo-if7"/>
+                    <constraint firstAttribute="bottom" secondItem="x1z-Oy-91l" secondAttribute="bottom" id="ZTF-Ju-Aep"/>
+                    <constraint firstAttribute="bottom" secondItem="z1T-yR-NmE" secondAttribute="bottom" constant="4" id="rAK-Ez-F3W"/>
+                    <constraint firstAttribute="trailing" secondItem="z1T-yR-NmE" secondAttribute="trailing" constant="9" id="vQO-Qj-pcD"/>
                 </constraints>
             </view>
-            <point key="canvasLocation" x="210" y="234"/>
+            <point key="canvasLocation" x="282" y="124"/>
         </window>
     </objects>
 </document>
