@@ -673,7 +673,7 @@
         <window title="MenubarlessClock" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" hasShadow="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titlebarAppearsTransparent="YES" id="QvC-M9-y7g" customClass="NSPanel">
             <windowStyleMask key="styleMask" nonactivatingPanel="YES" fullSizeContentView="YES"/>
             <windowPositionMask key="initialPositionMask" rightStrut="YES" topStrut="YES"/>
-            <rect key="contentRect" x="1234" y="778" width="92" height="22"/>
+            <rect key="contentRect" x="1234" y="779" width="92" height="22"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1050"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="45" height="22"/>

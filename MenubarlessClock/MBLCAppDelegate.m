@@ -57,21 +57,24 @@
 	self = [super initWithCoder: coder];
 	if (self) {
 		self.wantsLayer = YES;
-		self.layer.backgroundColor = [NSColor clearColor].CGColor;
+		self.layer.backgroundColor = NSColor.clearColor.CGColor;
 		self.layer.masksToBounds = YES;
 		self.layerUsesCoreImageFilters = YES;
 		self.layer.needsDisplayOnBoundsChange = YES;
 		self.layer.maskedCorners = kCALayerMinXMinYCorner;
 		self.layer.cornerRadius = 6.0;
 
-		CIFilter *blurFilter = [CIFilter filterWithName: @"CIGaussianBlur"];
+		CIFilter *blurFilter = [CIFilter filterWithName: @"CIMotionBlur"];
 		[blurFilter setDefaults];
-		[blurFilter setValue: @2.0 forKey: @"inputRadius"];
-
-		self.layer.filters = @[blurFilter];
+		[blurFilter setValue: @16.0 forKey: @"inputRadius"];
+		
+//		CIFilter *saturationFilter = [CIFilter filterWithName:@"CIColorControls"];
+//		[saturationFilter setDefaults];
+//		[saturationFilter setValue:@2.0 forKey:@"inputSaturation"];
+		
+		self.layer.filters = @[/*saturationFilter,*/ blurFilter];
 
 		[self.layer setNeedsDisplay];
-
 	}
 	return self;
 }
@@ -80,35 +83,32 @@
 	self = [super initWithFrame: frameRect];
 	if (self) {
 		self.wantsLayer = YES;
-		self.layer.backgroundColor = [NSColor clearColor].CGColor;
+		self.layer.backgroundColor = NSColor.clearColor.CGColor;
 		self.layer.masksToBounds = YES;
 		self.layerUsesCoreImageFilters = YES;
 		self.layer.needsDisplayOnBoundsChange = YES;
 		self.layer.maskedCorners = kCALayerMinXMinYCorner;
 		self.layer.cornerRadius = 6.0;
 
-		CIFilter *blurFilter = [CIFilter filterWithName: @"CIGaussianBlur"];
+		CIFilter *blurFilter = [CIFilter filterWithName: @"CIMotionBlur"];
 		[blurFilter setDefaults];
-		[blurFilter setValue: @4.0 forKey: @"inputRadius"];
-
-		self.layer.filters = @[blurFilter];
+		[blurFilter setValue: @16.0 forKey: @"inputRadius"];
+		
+//		CIFilter *saturationFilter = [CIFilter filterWithName:@"CIColorControls"];
+//		[saturationFilter setDefaults];
+//		[saturationFilter setValue:@2.0 forKey:@"inputSaturation"];
+		
+		self.layer.filters = @[/*saturationFilter,*/ blurFilter];
 
 		[self.layer setNeedsDisplay];
-
 	}
 	return self;
 }
 
 -(void)	drawRect:(NSRect)dirtyRect
 {
-	[self.window.backgroundColor set];
+	[NSColor.clearColor set];
 	NSRectFillUsingOperation(self.bounds, NSCompositingOperationCopy);
-
-	CGFloat		cornerRadius = 6;
-	NSRect		bezelBox = self.bounds;
-	bezelBox.size.height += cornerRadius;
-	bezelBox.size.width += cornerRadius;
-	NSBezierPath *roundedPath = [NSBezierPath bezierPathWithRoundedRect: bezelBox xRadius: cornerRadius yRadius: cornerRadius];
 		
 	NSURL *desktopImageURL = self.window.screen ? [NSWorkspace.sharedWorkspace desktopImageURLForScreen: self.window.screen] : nil;
 	NSImage * desktopImage = desktopImageURL ? [[NSImage alloc] initWithContentsOfURL: desktopImageURL] : nil;
@@ -116,16 +116,19 @@
 		desktopImage = [[NSWorkspace sharedWorkspace] desktopImageSnapshot];
 	}
 	if (desktopImage) { // When the image is random from a folder, we get `nil` here.
-		[NSColor.whiteColor set];
-		[roundedPath fill];
-		NSRect box = {
-			{ desktopImage.size.width -self.bounds.size.width, 0 },
-			self.bounds.size
-		};
-		[desktopImage drawAtPoint: NSZeroPoint fromRect: box operation:NSCompositingOperationSourceIn fraction: 1.0];
+		NSRect box = { NSZeroPoint, { desktopImage.size.width, 1 } };
+		NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL pixelsWide:box.size.width pixelsHigh:box.size.height bitsPerSample:8 samplesPerPixel:4 hasAlpha:YES isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace bytesPerRow: box.size.width * 4 bitsPerPixel:32];
+		NSGraphicsContext * context = [NSGraphicsContext graphicsContextWithBitmapImageRep: rep];
+		[NSGraphicsContext saveGraphicsState];
+		[NSGraphicsContext setCurrentContext: context];
+		[desktopImage drawInRect: box fromRect: NSZeroRect operation:NSCompositingOperationCopy fraction: 1.0];
+		[NSGraphicsContext restoreGraphicsState];
+		NSImage *squishedImage = [[NSImage alloc] initWithSize: NSMakeSize(desktopImage.size.width, 1)];
+		[squishedImage addRepresentation: rep];
+		[squishedImage drawInRect: self.bounds fromRect: box operation:NSCompositingOperationCopy fraction: 1.0];
 	} else {
 		[NSColor.windowBackgroundColor set];
-		[roundedPath fill];
+		NSRectFillUsingOperation(self.bounds, NSCompositingOperationCopy);
 	}
 }
 
@@ -425,7 +428,7 @@ static void	PowerStateChangedCallback( void* context )
 		theScreen = NSScreen.screens[0];
 	NSRect			screenFrame = theScreen.frame;
 	currentBox.origin.x = NSMaxX(screenFrame) -currentBox.size.width;
-	currentBox.origin.y = NSMaxY(screenFrame) -currentBox.size.height;
+	currentBox.origin.y = NSMaxY(screenFrame) -currentBox.size.height + 1;
 	[self.window setFrame: currentBox display: YES];
 	
 	if( !self.showSeconds && !self.flashSeparators && sender )
